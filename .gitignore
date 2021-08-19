@@ -1,1 +1,8 @@
+# python
+*.py[cx]
+
+# virtualenv
+venv
+
+# jetbrains
 .idea
