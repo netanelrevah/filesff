@@ -1,6 +1,9 @@
 # python
 *.py[cx]
 
+# pytest
+.pytest_cache
+
 # virtualenv
 venv
 
