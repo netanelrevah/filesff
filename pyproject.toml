@@ -1,0 +1,17 @@
+[tool.black]
+line-length = 120
+target-version = ['py37', 'py38', 'py39']
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.poetry]
+name = "filesff"
+version = "0.0.2"
+description = "Files for Fun; Python Utilities"
+authors = []
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

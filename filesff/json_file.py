@@ -23,6 +23,7 @@ class JsonFile(FileAccessor):
     """
     Just json with file handle
     """
+
     FORMATTER = json
 
     def load(self):
