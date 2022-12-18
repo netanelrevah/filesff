@@ -1,6 +1,6 @@
 import json
 
-from filesff.formatted_file import FileAccessor
+from filesff.formatted_files import FileAccessor
 
 
 class JsonSerializable:
@@ -20,13 +20,10 @@ class JsonSerializable:
 
 
 class JsonFile(FileAccessor):
-    """
-    Just json with file handle
-    """
     FORMATTER = json
 
     def load(self):
         return self.FORMATTER.loads(self.get_reader().read())
 
     def dump(self, content):
-        self.get_writer.write(self.FORMATTER.dumps(content, indent=2))
+        self.get_writer().write(self.FORMATTER.dumps(content, indent=2))

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "filesff"
+version = "0.0.2"
+description = "Files for Fun; Python Utilities"
+authors = ["Netanel Revah <netanelrevah@outlook.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"

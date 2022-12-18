@@ -1,6 +1,6 @@
 import json
 
-from filesff.formatted_file import FileAccessor
+from filesff.formatted_files import FileAccessor
 
 
 class JsonLinesFile(FileAccessor):
