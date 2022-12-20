@@ -3,29 +3,36 @@ import os
 from dataclasses import dataclass
 from gzip import GzipFile
 from pathlib import Path
-from tempfile import NamedTemporaryFile, TemporaryFile
+from tempfile import NamedTemporaryFile
 
 
 class FilePointer:
     @property
-    def file_path(self):
+    def path(self) -> Path:
         raise NotImplementedError()
+
+    @property
+    def size(self):
+        return self.path.stat().st_size
+
+    def exists(self):
+        return self.path.exists()
 
 
 @dataclass
 class PathFilePointer(FilePointer):
-    _file_path: Path
+    _path: Path
 
     @property
-    def file_path(self) -> Path:
-        return self._file_path
+    def path(self) -> Path:
+        return self._path
 
 
 @dataclass
 class TemporaryFilePointer(PathFilePointer):
     should_delete: bool
 
-    def __enter__(self):
+    def __enter__(self) -> "TemporaryFilePointer":
         return self
 
     def delete(self):
@@ -33,7 +40,7 @@ class TemporaryFilePointer(PathFilePointer):
             return
 
         try:
-            os.remove(self.file_path)
+            os.remove(self.path)
         except OSError:
             pass
 
@@ -44,62 +51,65 @@ class TemporaryFilePointer(PathFilePointer):
         self.delete()
 
     @classmethod
-    def create(cls, prefix=None, suffix=None, directory=None, delete=True):
+    def create(cls, prefix=None, suffix=None, directory=None, delete=True) -> "TemporaryFilePointer":
         file_path = NamedTemporaryFile(prefix=prefix, suffix=suffix, dir=directory, delete=True).name
 
-        return TemporaryFilePointer(Path(file_path), delete)
+        return cls(Path(file_path), delete)
 
 
 @dataclass
 class FileHandle:
     FILE_NAME_EXTENSION = ""
     FILE_NAME_ADDITIONAL_EXTENSIONS = []
-    COMPRESSED = False
 
-    file_pointer: FilePointer
-
-    @property
-    def file_path(self):
-        return self.file_pointer.file_path
+    pointer: FilePointer
 
     @property
     def extension(self):
         return self.FILE_NAME_EXTENSION
 
-    @property
-    def is_compressed(self):
-        return self.COMPRESSED
-
-    @property
-    def file_size(self):
-        return os.stat(self.file_path).st_size
-
     def create_empty_file(self):
-        if not os.path.exists(self.file_path):
-            self.create_writer()
+        if not self.pointer.path.exists():
+            self.create_unicode_writer()
 
-    def create_writer(self, write_mode="wb"):
-        return open(self.file_path, mode=write_mode)
+    def open(self, mode):
+        return self.pointer.path.open(mode=mode)
 
-    def create_reader(self):
+    def create_writer(self, mode="w"):
+        return self.open(mode)
+
+    def create_reader(self, mode="r"):
+        return self.open(mode)
+
+    def create_unicode_writer(self):
+        return self.create_writer(mode="w")
+
+    def create_bytes_writer(self):
+        return self.create_writer(mode="wb")
+
+    def create_unicode_reader(self):
         self.create_empty_file()  # we must have at least empty file to create reader
-        return open(self.file_path, mode="rb")
+        return self.create_reader(mode="r")
+
+    def create_bytes_reader(self):
+        self.create_empty_file()  # we must have at least empty file to create reader
+        return self.create_reader(mode="rb")
 
     @classmethod
-    def of(cls, file_path: Path):
-        return cls(PathFilePointer(file_path))
+    def of(cls, path: Path):
+        return cls(PathFilePointer(path))
 
 
-class GzippedFileHandle(FileHandle):
+class CompressedFileHandle(FileHandle):
+    pass
+
+
+class GzippedFileHandle(CompressedFileHandle):
     FILE_NAME_EXTENSION = ".gz"
     FILE_NAME_ADDITIONAL_EXTENSIONS = [".gzip"]
-    COMPRESSED = True
 
-    def create_writer(self, write_mode="wb"):
-        return GzipFile(fileobj=super(GzippedFileHandle, self).create_writer(write_mode=write_mode))
-
-    def create_reader(self):
-        return GzipFile(fileobj=super(GzippedFileHandle, self).create_reader())
+    def open(self, mode):
+        return GzipFile(fileobj=super(GzippedFileHandle, self).open(mode=mode))
 
 
 def create_directory_if_absence(file_path):

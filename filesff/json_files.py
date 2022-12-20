@@ -1,4 +1,9 @@
-import json
+from typing import Any
+
+try:
+    import ujson as json
+except ImportError:
+    import json
 
 from filesff.formatted_files import FileAccessor
 
@@ -23,7 +28,7 @@ class JsonFile(FileAccessor):
     FORMATTER = json
 
     def load(self):
-        return self.FORMATTER.loads(self.get_reader().read())
+        return self.FORMATTER.loads(self.handle.create_unicode_reader().read())
 
-    def dump(self, content):
-        self.get_writer().write(self.FORMATTER.dumps(content, indent=2))
+    def dump(self, value: Any):
+        self.handle.create_unicode_writer().write(self.FORMATTER.dumps(value, indent=2))

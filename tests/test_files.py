@@ -3,10 +3,10 @@ from filesff.files import TemporaryFilePointer
 
 def test_context_manager_temp_file():
     with TemporaryFilePointer.create() as tfp:
-        file_path = tfp.file_path
-        assert not tfp.file_path.exists()
+        file_path = tfp.path
+        assert not tfp.exists()
         file_path.write_text("d")
-        assert tfp.file_path.exists()
+        assert tfp.exists()
     assert not file_path.exists()
 
     del tfp
@@ -15,9 +15,9 @@ def test_context_manager_temp_file():
 
 def test_regular_temp_file():
     tfp = TemporaryFilePointer.create()
-    file_path = tfp.file_path
-    assert not tfp.file_path.exists()
+    file_path = tfp.path
+    assert not tfp.exists()
     file_path.write_text("d")
-    assert tfp.file_path.exists()
+    assert tfp.exists()
     del tfp
     assert not file_path.exists()

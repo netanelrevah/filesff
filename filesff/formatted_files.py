@@ -1,22 +1,26 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Type
+from typing import Any, Optional, Type
 
 from filesff.files import FileHandle
 
 
 @dataclass
 class FileAccessor:
-    file_handle: FileHandle
+    handle: FileHandle
 
-    def get_writer(self, write_compressed_data=False):
-        if write_compressed_data:
-            return FileHandle.create_writer(self.file_handle)
-        return self.file_handle.create_writer()
+    def create_reader(self):
+        return self.handle.create_unicode_reader()
 
-    def get_reader(self):
-        return self.file_handle.create_reader()
+    def create_writer(self):
+        return self.handle.create_unicode_writer()
+
+    def load(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    def dump(self, *args, **kwargs):
+        raise NotImplementedError()
 
     @classmethod
-    def open(cls, path: Path, file_handle: Optional[Type[FileHandle]] = FileHandle) -> "FileAccessor":
-        return cls(file_handle.of(path))
+    def open(cls, path: Path, file_handle_cls: Optional[Type[FileHandle]] = FileHandle) -> "FileAccessor":
+        return cls(file_handle_cls.of(path))
