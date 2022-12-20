@@ -3,6 +3,7 @@ import os
 from dataclasses import dataclass
 from gzip import GzipFile
 from pathlib import Path
+from tempfile import NamedTemporaryFile, TemporaryFile
 
 
 class FilePointer:
@@ -18,6 +19,35 @@ class PathFilePointer(FilePointer):
     @property
     def file_path(self) -> Path:
         return self._file_path
+
+
+@dataclass
+class TemporaryFilePointer(PathFilePointer):
+    should_delete: bool
+
+    def __enter__(self):
+        return self
+
+    def delete(self):
+        if not self.should_delete:
+            return
+
+        try:
+            os.remove(self.file_path)
+        except OSError:
+            pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.delete()
+
+    def __del__(self):
+        self.delete()
+
+    @classmethod
+    def create(cls, prefix=None, suffix=None, directory=None, delete=True):
+        file_path = NamedTemporaryFile(prefix=prefix, suffix=suffix, dir=directory, delete=True).name
+
+        return TemporaryFilePointer(Path(file_path), delete)
 
 
 @dataclass
