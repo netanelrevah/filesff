@@ -10,10 +10,10 @@ class FileAccessor:
     handle: FileHandle
 
     def create_reader(self):
-        return self.handle.create_unicode_reader()
+        return self.handle.create_reader()
 
     def create_writer(self):
-        return self.handle.create_unicode_writer()
+        return self.handle.create_writer()
 
     def load(self, *args, **kwargs):
         raise NotImplementedError()

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from gzip import GzipFile
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import IO, BinaryIO, TextIO, Union
 
 
 class FilePointer:
@@ -59,55 +60,55 @@ class TemporaryFilePointer(PathFilePointer):
 
 @dataclass
 class FileHandle:
-    FILE_NAME_EXTENSION = ""
-    FILE_NAME_ADDITIONAL_EXTENSIONS = []
-
     pointer: FilePointer
-
-    @property
-    def extension(self):
-        return self.FILE_NAME_EXTENSION
 
     def create_empty_file(self):
         if not self.pointer.path.exists():
-            self.create_unicode_writer()
+            self.create_writer()
 
-    def open(self, mode):
+    def open(self, mode) -> Union[IO, TextIO, BinaryIO]:
+        if "r" in mode:
+            self.create_empty_file()
         return self.pointer.path.open(mode=mode)
 
-    def create_writer(self, mode="w"):
-        return self.open(mode)
+    def create_writer(self) -> IO:
+        raise NotImplementedError()
 
-    def create_reader(self, mode="r"):
-        return self.open(mode)
-
-    def create_unicode_writer(self):
-        return self.create_writer(mode="w")
-
-    def create_bytes_writer(self):
-        return self.create_writer(mode="wb")
-
-    def create_unicode_reader(self):
-        self.create_empty_file()  # we must have at least empty file to create reader
-        return self.create_reader(mode="r")
-
-    def create_bytes_reader(self):
-        self.create_empty_file()  # we must have at least empty file to create reader
-        return self.create_reader(mode="rb")
+    def create_reader(self) -> IO:
+        raise NotImplementedError()
 
     @classmethod
     def of(cls, path: Path):
         return cls(PathFilePointer(path))
 
 
-class CompressedFileHandle(FileHandle):
-    pass
+@dataclass
+class TextFileHandle(FileHandle):
+    def create_writer(self) -> TextIO:
+        return self.open(mode="w")
+
+    def create_reader(self) -> TextIO:
+        return self.open(mode="r")
+
+
+@dataclass
+class BytesFileHandle(FileHandle):
+    def create_writer(self) -> BinaryIO:
+        return self.open(mode="wb")
+
+    def create_reader(self) -> BinaryIO:
+        return self.open(mode="rb")
+
+
+class CompressedFileHandle(BytesFileHandle):
+    def create_compressed_reader(self):
+        return self.create_reader()
+
+    def create_compressed_writer(self):
+        return self.create_writer()
 
 
 class GzippedFileHandle(CompressedFileHandle):
-    FILE_NAME_EXTENSION = ".gz"
-    FILE_NAME_ADDITIONAL_EXTENSIONS = [".gzip"]
-
     def open(self, mode):
         return GzipFile(fileobj=super(GzippedFileHandle, self).open(mode=mode))
 

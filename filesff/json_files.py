@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from typing import Any
+
+from filesff.files import TextFileHandle
 
 try:
     import ujson as json
@@ -24,11 +27,14 @@ class JsonSerializable:
         return json.dumps(self.to_dict())
 
 
+@dataclass
 class JsonFile(FileAccessor):
     FORMATTER = json
 
+    handle: TextFileHandle
+
     def load(self):
-        return self.FORMATTER.loads(self.handle.create_unicode_reader().read())
+        return self.FORMATTER.loads(self.handle.create_reader().read())
 
     def dump(self, value: Any):
-        self.handle.create_unicode_writer().write(self.FORMATTER.dumps(value, indent=2))
+        self.handle.create_writer().write(self.FORMATTER.dumps(value, indent=2))
