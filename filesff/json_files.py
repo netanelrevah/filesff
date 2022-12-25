@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import IO, Any, Optional, Text, TextIO
 
-from filesff.files import TextFileHandle
+from filesff.files import FileHandle
 
 try:
     import ujson as json
@@ -9,6 +9,14 @@ except ImportError:
     import json
 
 from filesff.formatted_files import FileAccessor
+
+
+class JsonFormatter:
+    def load(self, file_object: IO) -> Text:
+        raise NotImplementedError()
+
+    def dump(self, value: Any, file_object: TextIO, indent: Optional[int]):
+        raise NotImplementedError()
 
 
 class JsonSerializable:
@@ -29,12 +37,11 @@ class JsonSerializable:
 
 @dataclass
 class JsonFile(FileAccessor):
-    FORMATTER = json
-
-    handle: TextFileHandle
+    handle: FileHandle
+    formatter: JsonFormatter = json
 
     def load(self):
-        return self.FORMATTER.loads(self.handle.create_reader().read())
+        return self.formatter.load(self.handle.create_text_reader())
 
     def dump(self, value: Any):
-        self.handle.create_writer().write(self.FORMATTER.dumps(value, indent=2))
+        self.formatter.dump(self.handle.create_text_writer(), value, indent=2)

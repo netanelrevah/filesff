@@ -15,10 +15,10 @@ class JsonLinesFile(FileAccessor):
         return list(iter(self))
 
     def dump(self, values_list: List[Any]):
-        writer = self.create_writer()
+        writer = self.handle.create_text_writer()
         for value in values_list:
             writer.write(self.LINES_FORMATTER.dumps(value) + "\n")
 
     def __iter__(self):
-        for line in self.handle.create_unicode_reader():
+        for line in self.handle.create_text_reader():
             yield self.LINES_FORMATTER.loads(line)

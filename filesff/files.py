@@ -64,48 +64,36 @@ class FileHandle:
 
     def create_empty_file(self):
         if not self.pointer.path.exists():
-            self.create_writer()
+            self.create_text_writer()
 
     def open(self, mode) -> Union[IO, TextIO, BinaryIO]:
         if "r" in mode:
             self.create_empty_file()
         return self.pointer.path.open(mode=mode)
 
-    def create_writer(self) -> IO:
-        raise NotImplementedError()
+    def create_text_writer(self) -> TextIO:
+        return self.open(mode="w")
 
-    def create_reader(self) -> IO:
-        raise NotImplementedError()
+    def create_text_reader(self) -> TextIO:
+        return self.open(mode="r")
+
+    def create_bytes_writer(self) -> BinaryIO:
+        return self.open(mode="wb")
+
+    def create_bytes_reader(self) -> BinaryIO:
+        return self.open(mode="rb")
 
     @classmethod
     def of(cls, path: Path):
         return cls(PathFilePointer(path))
 
 
-@dataclass
-class TextFileHandle(FileHandle):
-    def create_writer(self) -> TextIO:
-        return self.open(mode="w")
-
-    def create_reader(self) -> TextIO:
-        return self.open(mode="r")
-
-
-@dataclass
-class BytesFileHandle(FileHandle):
-    def create_writer(self) -> BinaryIO:
-        return self.open(mode="wb")
-
-    def create_reader(self) -> BinaryIO:
-        return self.open(mode="rb")
-
-
-class CompressedFileHandle(BytesFileHandle):
+class CompressedFileHandle(FileHandle):
     def create_compressed_reader(self):
-        return self.create_reader()
+        return self.create_bytes_reader()
 
     def create_compressed_writer(self):
-        return self.create_writer()
+        return self.create_bytes_writer()
 
 
 class GzippedFileHandle(CompressedFileHandle):
