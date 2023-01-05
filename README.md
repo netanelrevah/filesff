@@ -42,12 +42,12 @@ from messages.v1.messages_pb2 import Message
 # the long way
 pointer = TemporaryFilePointer.create()
 handle = FileHandle(pointer)
-accessor = ProtoJsonFile(handle, Message)
+accessor = ProtoJsonFile(handle, message_cls=Message)
 
-json_data = accessor.load()
+message = accessor.load()
 
 # or shorter
-accessor = ProtoJsonFile.of_temp(Message)
+accessor = ProtoJsonFile.of_temp(message_cls=Message)
 
-accessor.dump({"json": "data"})
+message = accessor.load()
 ```
