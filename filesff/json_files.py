@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, Any, AnyStr, Optional, Text, TextIO
+from typing import IO, Any, AnyStr, Optional, Text, TextIO, Type
 
 from filesff.files_handlers import FileHandle
 
@@ -42,7 +42,7 @@ class JsonSerializable:
 
 
 @dataclass
-class JsonFile(FileAccessor):
+class JsonFileAccessor(FileAccessor):
     handle: FileHandle
     formatter: JsonFormatter = json
 

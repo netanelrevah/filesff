@@ -2,10 +2,11 @@ import errno
 import os
 from dataclasses import dataclass
 from gzip import GzipFile
+from os import PathLike
 from pathlib import Path
 from typing import IO, BinaryIO, TextIO, Union
 
-from filesff.file_pointers import FilePointer, SimpleFilePointer
+from filesff.file_pointers import FilePointer, SimpleFilePointer, TemporaryFilePointer
 
 
 @dataclass
@@ -34,8 +35,12 @@ class FileHandle:
         return self.open(mode="rb")
 
     @classmethod
-    def of(cls, path: Path):
-        return cls(SimpleFilePointer(path))
+    def of(cls, path: str | PathLike[str]):
+        return cls(SimpleFilePointer.of(path))
+
+    @classmethod
+    def of_temp(cls):
+        return cls(TemporaryFilePointer.create())
 
 
 class CompressedFileHandle(FileHandle):

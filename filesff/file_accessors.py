@@ -16,5 +16,9 @@ class FileAccessor:
         raise NotImplementedError()
 
     @classmethod
-    def open(cls, path: Path, file_handle_cls: Optional[Type[FileHandle]] = FileHandle) -> "FileAccessor":
-        return cls(file_handle_cls.of(path))
+    def of(cls, file_path, file_handle_cls: Type[FileHandle] = FileHandle) -> "FileAccessor":
+        return cls(file_handle_cls.of(file_path))
+
+    @classmethod
+    def of_temp(cls, file_handle_cls: Type[FileHandle] = FileHandle):
+        return cls(file_handle_cls.of_temp())

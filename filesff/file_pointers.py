@@ -1,7 +1,9 @@
 import os
 from dataclasses import dataclass
+from os import PathLike
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import AnyStr, Union
 
 
 class FilePointer:
@@ -24,6 +26,10 @@ class SimpleFilePointer(FilePointer):
     @property
     def path(self) -> Path:
         return self._path
+
+    @classmethod
+    def of(cls, path: str | PathLike[str]):
+        return cls(Path(path))
 
 
 @dataclass
