@@ -1,4 +1,5 @@
 import errno
+import gzip
 import os
 from dataclasses import dataclass
 from gzip import GzipFile
@@ -23,10 +24,10 @@ class FileHandle:
         return self.pointer.path.open(mode=mode)
 
     def create_text_writer(self) -> TextIO:
-        return self.open(mode="w")
+        return self.open(mode="wt")
 
     def create_text_reader(self) -> TextIO:
-        return self.open(mode="r")
+        return self.open(mode="rt")
 
     def create_bytes_writer(self) -> BinaryIO:
         return self.open(mode="wb")
@@ -45,12 +46,12 @@ class FileHandle:
 
 class CompressedFileHandle(FileHandle):
     def create_compressed_reader(self):
-        return self.create_bytes_reader()
+        return super(CompressedFileHandle, self).open("rb")
 
     def create_compressed_writer(self):
-        return self.create_bytes_writer()
+        return super(CompressedFileHandle, self).open("wb")
 
 
 class GzippedFileHandle(CompressedFileHandle):
     def open(self, mode):
-        return GzipFile(fileobj=super(GzippedFileHandle, self).open(mode=mode))
+        return gzip.open(self.pointer.path, mode=mode)
