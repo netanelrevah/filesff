@@ -1,14 +1,14 @@
 from dataclasses import dataclass
-from typing import IO, Any, Optional, Text, TextIO
+from typing import IO, Any, AnyStr, Optional, Text, TextIO
 
-from filesff.files import FileHandle
+from filesff.files_handlers import FileHandle
 
 try:
     import ujson as json
 except ImportError:
     import json
 
-from filesff.formatted_files import FileAccessor
+from filesff.file_accessors import FileAccessor
 
 
 class JsonFormatter:
@@ -16,6 +16,12 @@ class JsonFormatter:
         raise NotImplementedError()
 
     def dump(self, value: Any, file_object: TextIO, indent: Optional[int]):
+        raise NotImplementedError()
+
+    def dumps(self, value: Any):
+        raise NotImplementedError()
+
+    def loads(self, text: AnyStr):
         raise NotImplementedError()
 
 

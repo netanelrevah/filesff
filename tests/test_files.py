@@ -1,4 +1,4 @@
-from filesff.files import TemporaryFilePointer
+from filesff.file_pointers import TemporaryFilePointer
 
 
 def test_context_manager_temp_file():

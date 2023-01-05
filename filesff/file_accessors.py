@@ -2,14 +2,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional, Type
 
-from filesff.files import FileHandle
+from filesff.files_handlers import FileHandle
 
 
 @dataclass
 class FileAccessor:
     handle: FileHandle
 
-    def load(self, *args, **kwargs):
+    def load(self):
         raise NotImplementedError()
 
     def dump(self, *args, **kwargs):
