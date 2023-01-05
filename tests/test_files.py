@@ -30,13 +30,17 @@ def test_regular_temp_file():
 def test_gzip_file():
     temp_file_path = NamedTemporaryFile(delete=True).name
 
-    gzip_file = GzipFile(filename=temp_file_path, mode="w")
-    gzip_file.write(b"blablabla")
-    gzip_file.close()
+    with GzipFile(filename=temp_file_path, mode="w") as gzip_file:
+        gzip_file.write(b"blablabla")
 
     handle = GzippedFileHandle.of(temp_file_path)
-    assert handle.create_text_reader().read() == "blablabla"
-    assert handle.create_bytes_reader().read() == b"blablabla"
 
-    assert handle.create_compressed_reader() != b"blablabla"
-    assert handle.create_compressed_reader() != "blablabla"
+    with handle.create_text_reader() as reader:
+        assert reader.read() == "blablabla"
+
+    with handle.create_bytes_reader() as reader:
+        assert reader.read() == b"blablabla"
+
+    with handle.create_compressed_reader() as reader:
+        value = reader.read()
+        assert value != b"blablabla" and value != "blablabla"

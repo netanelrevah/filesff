@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Optional, Type
+from typing import Type
 
 from filesff.files_handlers import FileHandle
 
@@ -12,7 +11,7 @@ class FileAccessor:
     def load(self):
         raise NotImplementedError()
 
-    def dump(self, *args, **kwargs):
+    def dump(self, value):
         raise NotImplementedError()
 
     @classmethod

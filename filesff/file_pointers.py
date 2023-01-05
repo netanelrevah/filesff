@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import AnyStr, Union
 
 
 class FilePointer:

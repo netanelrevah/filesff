@@ -1,10 +1,6 @@
-import errno
 import gzip
-import os
 from dataclasses import dataclass
-from gzip import GzipFile
 from os import PathLike
-from pathlib import Path
 from typing import IO, BinaryIO, TextIO, Union
 
 from filesff.file_pointers import FilePointer, SimpleFilePointer, TemporaryFilePointer
@@ -46,10 +42,10 @@ class FileHandle:
 
 class CompressedFileHandle(FileHandle):
     def create_compressed_reader(self):
-        return super(CompressedFileHandle, self).open("rb")
+        return super().open("rb")
 
     def create_compressed_writer(self):
-        return super(CompressedFileHandle, self).open("wb")
+        return super().open("wb")
 
 
 class GzippedFileHandle(CompressedFileHandle):

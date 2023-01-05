@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from typing import IO, Any, AnyStr, Optional, Text, TextIO, Type
+from typing import IO, Any, AnyStr, Optional, Text, TextIO
 
+from filesff.file_accessors import FileAccessor
 from filesff.files_handlers import FileHandle
 
 try:
     import ujson as json
 except ImportError:
     import json
-
-from filesff.file_accessors import FileAccessor
 
 
 class JsonFormatter:
@@ -47,7 +46,9 @@ class JsonFileAccessor(FileAccessor):
     formatter: JsonFormatter = json
 
     def load(self):
-        return self.formatter.load(self.handle.create_text_reader())
+        with self.handle.create_text_reader() as reader:
+            return self.formatter.load(reader)
 
     def dump(self, value: Any):
-        self.formatter.dump(self.handle.create_text_writer(), value, indent=2)
+        with self.handle.create_text_writer() as writer:
+            self.formatter.dump(writer, value, indent=2)

@@ -14,10 +14,12 @@ class ProtoJsonFile(FileAccessor):
     message_cls: Any
 
     def load(self):
-        return Parse(self.handle.create_text_reader().read(), message=self.message_cls())
+        with self.handle.create_text_reader() as reader:
+            return Parse(reader.read(), message=self.message_cls())
 
-    def dump(self, message):
-        return self.handle.create_text_writer().write(MessageToJson(message))
+    def dump(self, value):
+        with self.handle.create_text_writer() as writer:
+            return writer.write(MessageToJson(value))
 
     @classmethod
     def of(cls, file_path: str | PathLike[str], message_cls: Any, file_handle_cls: Type[FileHandle] = FileHandle):
