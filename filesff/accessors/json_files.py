@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import IO, Any, AnyStr, Optional, Text, TextIO
 
-from filesff.file_accessors import FileAccessor
-from filesff.files_handlers import FileHandle
+from filesff.accessors.base import FileAccessor
+from filesff.core.files_handlers import FileHandle
 
 try:
     import ujson as json
