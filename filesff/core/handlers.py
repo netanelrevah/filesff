@@ -3,11 +3,7 @@ from dataclasses import dataclass
 from os import PathLike
 from typing import IO, BinaryIO, TextIO, Union
 
-from filesff.core.file_pointers import (
-    FilePointer,
-    SimpleFilePointer,
-    TemporaryFilePointer,
-)
+from filesff.core.pointers import FilePointer, SimpleFilePointer, TemporaryFilePointer
 
 
 @dataclass

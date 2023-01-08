@@ -10,8 +10,8 @@ of the file as a python object and also to save python objects in the file forma
 for example, we want to read a json from gzip compressed file:
 
 ```python
-from filesff.core.file_pointers import SimpleFilePointer
-from filesff.core.files_handlers import GzippedFileHandle
+from filesff.core.pointers import SimpleFilePointer
+from filesff.core.handlers import GzippedFileHandle
 from filesff.usages.json_files import JsonFileAccessor
 
 # the long way
@@ -33,8 +33,8 @@ pip install fileff[protobuf]
 ```
 
 ```python
-from filesff.core.file_pointers import TemporaryFilePointer
-from filesff.core.files_handlers import FileHandle
+from filesff.core.pointers import TemporaryFilePointer
+from filesff.core.handlers import FileHandle
 from filesff.usages.protobuf_files import ProtoJsonFile
 
 from messages.v1.messages_pb2 import Message

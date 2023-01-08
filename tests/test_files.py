@@ -1,8 +1,8 @@
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-from filesff.core.file_pointers import TemporaryFilePointer
-from filesff.core.files_handlers import GzippedFileHandle
+from filesff.core.handlers import GzippedFileHandle
+from filesff.core.pointers import TemporaryFilePointer
 
 
 def test_context_manager_temp_file():
