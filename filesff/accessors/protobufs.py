@@ -25,7 +25,8 @@ def protojson_file(file_path, message_cls, file_handle_cls=FileHandle):
         file_handle_cls,
     )
 
-def protojson_temp_file(message_cls, file_handle_cls=FileHandle)
+
+def protojson_temp_file(message_cls, file_handle_cls=FileHandle):
     return FileAccessor.of_temp(
         ProtoJsonFileFormatter(message_cls),
         file_handle_cls,
