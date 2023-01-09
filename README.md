@@ -1,4 +1,4 @@
-from filesff.protobuf_files import ProtoJsonFilefrom filesff.files_handlers import GzippedFileHandle# FilesFF - Files For Fun
+# FilesFF - Files For Fun
 
 a package that helps work with files with three level of abstraction:
 * FilePointer - a pointer to a file (mostly path)
@@ -10,19 +10,10 @@ of the file as a python object and also to save python objects in the file forma
 for example, we want to read a json from gzip compressed file:
 
 ```python
-from filesff.core.pointers import SimpleFilePointer
 from filesff.core.handlers import GzippedFileHandle
-from filesff.usages.json_files import JsonFileAccessor
+from filesff.accessors.jsons import json_file
 
-# the long way
-pointer = SimpleFilePointer.of("/path/to/file.json")
-handle = GzippedFileHandle(pointer)
-accessor = JsonFileAccessor(handle)
-
-json_data = accessor.load()
-
-# or shorter
-accessor = JsonFileAccessor.of("/path/to/file.json", GzippedFileHandle)
+accessor = json_file("/path/to/file.gz", GzippedFileHandle)
 
 accessor.dump({"json": "data"})
 ```
@@ -33,21 +24,11 @@ pip install fileff[protobuf]
 ```
 
 ```python
-from filesff.core.pointers import TemporaryFilePointer
-from filesff.core.handlers import FileHandle
-from filesff.usages.protobuf_files import ProtoJsonFile
+from filesff.accessors.protobufs import protobuf_temp_file
 
 from messages.v1.messages_pb2 import Message
 
-# the long way
-pointer = TemporaryFilePointer.create()
-handle = FileHandle(pointer)
-accessor = ProtoJsonFile(handle, message_cls=Message)
-
-message = accessor.load()
-
-# or shorter
-accessor = ProtoJsonFile.of_temp(message_cls=Message)
+accessor = protobuf_temp_file(message_cls=Message)
 
 message = accessor.load()
 ```
