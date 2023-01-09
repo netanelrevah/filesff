@@ -1,8 +1,9 @@
+from contextlib import closing
 from dataclasses import dataclass
 from os import PathLike
-from typing import Any, List, Type
+from typing import Any, Generator, Iterator, List, Type
 
-from filesff.core.formatters import FileFormatter, StringFormatter
+from filesff.core.formatters import ContinuesFileFormatter, FileFormatter
 from filesff.core.handlers import FileHandle
 
 
@@ -34,33 +35,35 @@ class FileAccessor:
 
 
 @dataclass
-class LinesFileAccessor(FileAccessor):
+class ContinuousFileAccessor(FileAccessor):
     handle: FileHandle
-    formatter: StringFormatter
+    formatter: ContinuesFileFormatter
 
     def load(self):
-        return list(self.lines())
+        return list(self.load_continuously())
 
     def dump(self, value: List[Any]):
-        with self.handle.create_text_writer() as writer:
+        with closing(self.dump_continuously()) as lines_dumper:
             for item in value:
-                writer.write(self.formatter.dumps(item))
-                writer.write("\n")
+                lines_dumper.send(item)
 
-    def lines(self):
+    def load_continuously(self) -> Iterator[Any]:
         with self.handle.create_text_reader() as reader:
-            for line in reader:
-                yield self.formatter.loads(line)
+            yield from self.formatter.load_continuously(reader)
+
+    def dump_continuously(self) -> Generator[None, Any, None]:
+        with self.handle.create_text_writer() as writer:
+            yield from self.formatter.dump_continuously(writer)
 
     @classmethod
     def of(
         cls,
         file_path: str | PathLike[str],
-        formatter: StringFormatter,
+        formatter: ContinuesFileFormatter,
         file_handle_cls: Type[FileHandle] = FileHandle,
     ):
         return cls(file_handle_cls.of(file_path), formatter)
 
     @classmethod
-    def of_temp(cls, formatter: StringFormatter, file_handle_cls: Type[FileHandle] = FileHandle):
+    def of_temp(cls, formatter: ContinuesFileFormatter, file_handle_cls: Type[FileHandle] = FileHandle):
         return cls(file_handle_cls.of_temp(), formatter)

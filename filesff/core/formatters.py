@@ -1,12 +1,4 @@
-from typing import IO, Any, AnyStr
-
-
-class StringFormatter:
-    def loads(self, formatted_value: AnyStr) -> Any:
-        raise NotImplementedError()
-
-    def dumps(self, value: Any) -> AnyStr:
-        raise NotImplementedError()
+from typing import IO, Any, AnyStr, Generator
 
 
 class FileFormatter:
@@ -14,4 +6,12 @@ class FileFormatter:
         raise NotImplementedError()
 
     def dump(self, writer: IO, value: Any):
+        raise NotImplementedError()
+
+
+class ContinuesFileFormatter:
+    def load_continuously(self, reader: IO) -> Generator[AnyStr, None, None]:
+        raise NotImplementedError()
+
+    def dump_continuously(self, writer: IO) -> Generator[None, Any, None]:
         raise NotImplementedError()

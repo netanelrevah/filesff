@@ -1,6 +1,6 @@
-from filesff.core.accessors import FileAccessor, LinesFileAccessor
+from filesff.core.accessors import ContinuousFileAccessor, FileAccessor
 from filesff.core.handlers import FileHandle
-from filesff.formatters.jsons import JsonFormatter
+from filesff.formatters.jsons import JsonFormatter, JsonLinesFormatter
 
 
 def json_file(file_path, file_handle_cls=FileHandle, indentation=2):
@@ -12,8 +12,8 @@ def json_file(file_path, file_handle_cls=FileHandle, indentation=2):
 
 
 def json_lines_file(file_path, file_handle_cls=FileHandle):
-    return LinesFileAccessor.of(
+    return ContinuousFileAccessor.of(
         file_path=file_path,
-        formatter=JsonFormatter(indentation=0),
+        formatter=JsonLinesFormatter(),
         file_handle_cls=file_handle_cls,
     )
