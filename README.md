@@ -1,13 +1,19 @@
 # FilesFF - Files For Fun
 
-a package that helps work with files with three level of abstraction:
-* FilePointer - a pointer to a file (mostly path)
-* FileHandle - a handle to the file to allow creating readers and writers to the
-file in any encoding/compressing method
-* FileAccessor - an accessor to the file to allow reading the formatted content
-of the file as a python object and also to save python objects in the file format
+* python package to work with file handles
+* use handles of files as parameters without keeping open files
+* replace file handles easily with mocks
+* handle many file types with generic protocol
 
-for example, we want to read a json from gzip compressed file:
+to install
+
+```shell
+pip install filesff
+```
+
+## Usage
+
+read a json from gzip compressed file:
 
 ```python
 from filesff.core.handlers import GzippedFileHandle
@@ -18,7 +24,7 @@ accessor = json_file("/path/to/file.gz", GzippedFileHandle)
 accessor.dump({"json": "data"})
 ```
 
-another example, we want to write a protobuf into a temp file
+write a protobuf into a temp file
 ```shell
 pip install fileff[protobuf]
 ```
@@ -32,3 +38,26 @@ accessor = protobuf_temp_file(message_cls=Message)
 
 message = accessor.load()
 ```
+
+implement new file format:
+
+```python
+from filesff.core.formatters import FileFormatter
+
+class NewFileFormatter(FileFormatter):
+    def load(self, reader: IO) -> AnyStr:
+        return reader.read().replace("a", "e")
+
+    def dump(self, writer: IO, value: Any):
+        writer.write(value.replace("e", "a"))
+```
+
+use it 
+```python
+from filesff.core.accessors import FileAccessor
+
+file_accessor = FileAccessor.of("/a/file/path.ae", NewFileFormatter())
+file_accessor.load()
+```
+
+

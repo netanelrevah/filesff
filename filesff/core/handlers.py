@@ -1,3 +1,4 @@
+import bz2
 import gzip
 from dataclasses import dataclass
 from os import PathLike
@@ -51,3 +52,8 @@ class CompressedFileHandle(FileHandle):
 class GzippedFileHandle(CompressedFileHandle):
     def open(self, mode):
         return gzip.open(self.pointer.path, mode=mode)
+
+
+class BZip2FileHandle(CompressedFileHandle):
+    def open(self, mode):
+        return bz2.open(self.pointer.path, mode=mode)
