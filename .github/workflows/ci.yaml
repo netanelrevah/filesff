@@ -36,8 +36,6 @@ jobs:
         id: full-python-version
         run: echo version=$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))") >> $GITHUB_OUTPUT
 
-
-
       - name: Bootstrap poetry
         run: curl -sSL https://install.python-poetry.org | python - -y
 
@@ -70,7 +68,7 @@ jobs:
         run: poetry lock --check
 
       - name: Install dependencies
-        run: poetry install --with github-actions
+        run: poetry install --with dev -E protobuf -E ujson
 
       - uses: isort/isort-action@master
       - uses: psf/black@stable
