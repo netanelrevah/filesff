@@ -9,12 +9,18 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 ujson = { version = "^5.6.0", optional = true }
-protobuf = {version = "*", optional = true}
+protobuf = {version = "^4.22.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
-pytest-tstcls = "^2020.1.1"
+pytest-tstcls = { git = "https://github.com/netanelrevah/tstcls" }
 pytest-parametrization = "^2022.2.1"
+mypy = "^0.991"
+types-protobuf = "^4.21.0.3"
+types-ujson = "^5.7.0.0"
+black = "*"
+isort = "*"
+pyupgrade = "^3.3.1"
 
 [tool.poetry.extras]
 ujson = ["ujson"]
@@ -30,3 +36,6 @@ target-version = ['py310']
 
 [tool.isort]
 profile = "black"
+
+[tool.ruff]
+line-length = 120
