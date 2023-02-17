@@ -55,7 +55,7 @@ class FileAccessor:
     @contextmanager
     def create_dumper(self, **kwargs):
         with self.handle.create_text_writer() as writer:
-            return self.formatter.create_dumper(writer, **kwargs)
+            yield self.formatter.create_dumper(writer, **kwargs)
 
     @classmethod
     def of(
