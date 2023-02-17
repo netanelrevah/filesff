@@ -6,6 +6,12 @@ on:
       - main
 
 jobs:
+  lint-outside-of-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: isort/isort-action@master
+      - uses: psf/black@stable
   lint:
     runs-on: ${{ matrix.image }}
     name: ${{ matrix.os }} / ${{ matrix.python-version }}
@@ -70,8 +76,7 @@ jobs:
       - name: Install dependencies
         run: poetry install --with dev -E protobuf -E ujson
 
-      - uses: isort/isort-action@master
-      - uses: psf/black@stable
+
       - run: poetry run mypy filesff
 
       - name: Run pytest
