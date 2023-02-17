@@ -72,8 +72,7 @@ jobs:
 
       - uses: isort/isort-action@master
       - uses: psf/black@stable
-      - name: Run mypy
-        run: poetry run mypy
+      - run: poetry run mypy filesff
 
       - name: Run pytest
         run: poetry run pytest -v

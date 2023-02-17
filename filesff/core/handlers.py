@@ -2,7 +2,7 @@ import bz2
 import gzip
 from dataclasses import dataclass
 from os import PathLike
-from typing import IO, BinaryIO, TextIO, Union
+from typing import IO, BinaryIO, TextIO, Union, cast
 
 from filesff.core.pointers import FilePointer, SimpleFilePointer, TemporaryFilePointer
 
@@ -15,7 +15,7 @@ class FileHandle:
         if not self.pointer.path.exists():
             self.create_text_writer()
 
-    def open(self, mode) -> Union[IO, TextIO, BinaryIO]:
+    def open(self, mode):
         if "r" in mode:
             self.create_empty_file()
         return self.pointer.path.open(mode=mode)

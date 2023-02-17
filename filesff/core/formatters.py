@@ -1,17 +1,19 @@
-from typing import IO, Any, AnyStr, Generator
+from abc import ABC
+from collections.abc import Iterator
+from typing import IO, Any, Iterable
 
 
-class FileFormatter:
-    def load(self, reader: IO) -> AnyStr:
+class FullFileFormatter:
+    def load(self, reader: IO, **kwargs) -> Any:
         raise NotImplementedError()
 
-    def dump(self, writer: IO, value: Any):
+    def dump(self, writer: IO, value: Any, **kwargs):
         raise NotImplementedError()
 
 
-class ContinuesFileFormatter:
-    def load_continuously(self, reader: IO) -> Generator[AnyStr, None, None]:
+class FileFormatter(FullFileFormatter, ABC):
+    def create_loader(self, reader: IO, **kwargs):
         raise NotImplementedError()
 
-    def dump_continuously(self, writer: IO) -> Generator[None, Any, None]:
+    def create_dumper(self, writer: IO, **kwargs):
         raise NotImplementedError()
