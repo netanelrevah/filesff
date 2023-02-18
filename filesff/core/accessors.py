@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 from os import PathLike
-from typing import Any, Iterator, List, Type
+from typing import Any, Iterator, Type
 
 from filesff.core.formatters import FileFormatter, FullFileFormatter
 from filesff.core.handlers import FileHandle
