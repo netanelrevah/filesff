@@ -1,33 +1,52 @@
-from filesff.core.accessors import FileAccessor
+from filesff.core.accessors import FileAccessor, FullFileAccessor
 from filesff.core.handlers import FileHandle
-from filesff.formatters.protobufs import ProtoBytesFileFormatter, ProtoJsonFileFormatter
+from filesff.formatters.protobufs import (
+    ProtoBytesFileFormatter,
+    ProtoJsonFileFormatter,
+    ProtoJsonLinesFileFormatter,
+)
 
 
-def protobuf_file(file_path, message_cls, file_handle_cls=FileHandle):
+def protobuf_file_accessor(file_path, file_handle_cls=FileHandle):
+    return FullFileAccessor.of(
+        file_path,
+        ProtoBytesFileFormatter(),
+        file_handle_cls,
+    )
+
+
+def temp_protobuf_file_accessor(file_handle_cls=FileHandle):
+    return FullFileAccessor.of_temp(
+        ProtoBytesFileFormatter(),
+        file_handle_cls,
+    )
+
+
+def protojson_file_accessor(file_path, file_handle_cls=FileHandle):
+    return FullFileAccessor.of(
+        file_path,
+        ProtoJsonFileFormatter(),
+        file_handle_cls,
+    )
+
+
+def temp_protojson_file_accessor(file_handle_cls=FileHandle):
+    return FullFileAccessor.of_temp(
+        ProtoJsonFileFormatter(),
+        file_handle_cls,
+    )
+
+
+def protojson_lines_file_accessor(file_path, file_handle_cls=FileHandle):
     return FileAccessor.of(
         file_path,
-        ProtoBytesFileFormatter(message_cls),
+        ProtoJsonLinesFileFormatter(),
         file_handle_cls,
     )
 
 
-def protobuf_temp_file(message_cls, file_handle_cls=FileHandle):
+def temp_protojson_lines_file_accessor(file_handle_cls=FileHandle):
     return FileAccessor.of_temp(
-        ProtoBytesFileFormatter(message_cls),
-        file_handle_cls,
-    )
-
-
-def protojson_file(file_path, message_cls, file_handle_cls=FileHandle):
-    return FileAccessor.of(
-        file_path,
-        ProtoJsonFileFormatter(message_cls),
-        file_handle_cls,
-    )
-
-
-def protojson_temp_file(message_cls, file_handle_cls=FileHandle):
-    return FileAccessor.of_temp(
-        ProtoJsonFileFormatter(message_cls),
+        ProtoJsonLinesFileFormatter(),
         file_handle_cls,
     )

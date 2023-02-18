@@ -9,10 +9,9 @@ from filesff.core.formatters import FileFormatter, FullFileFormatter
 
 @dataclass
 class ProtoBytesFileFormatter(FullFileFormatter):
-    message_cls: Any
-
-    def load(self, reader: IO, **_) -> AnyStr:
-        return self.message_cls.ParseFromString(reader.read())
+    def load(self, reader: IO, **kwargs) -> AnyStr:
+        message_cls = kwargs["message_cls"]
+        return message_cls.ParseFromString(reader.read())
 
     def dump(self, writer: IO, value: Any, **kwargs):
         writer.write(value.SerializeToString())
@@ -20,10 +19,9 @@ class ProtoBytesFileFormatter(FullFileFormatter):
 
 @dataclass
 class ProtoJsonFileFormatter(FullFileFormatter):
-    message_cls: Any
-
-    def load(self, reader: IO, **_) -> AnyStr:
-        return Parse(reader.read(), message=self.message_cls())
+    def load(self, reader: IO, **kwargs) -> AnyStr:
+        message_cls = kwargs["message_cls"]
+        return Parse(reader.read(), message=message_cls())
 
     def dump(self, writer: IO, value: Any, **kwargs):
         writer.write(MessageToJson(value))
