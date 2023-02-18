@@ -76,7 +76,6 @@ jobs:
       - name: Install dependencies
         run: poetry install --with dev -E protobuf -E ujson
 
-
       - run: poetry run mypy filesff
 
       - name: Run pytest
