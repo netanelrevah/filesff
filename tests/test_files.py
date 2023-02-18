@@ -1,10 +1,7 @@
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-from filesff.accessors.csvs import (
-    create_csv_file_dict_accessor,
-    create_csv_file_lists_accessor,
-)
+from filesff.accessors.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
 from filesff.core.handlers import GzippedFileHandle
 from filesff.core.pointers import TemporaryFilePointer
 
@@ -54,7 +51,7 @@ def test_load_rows_as_dicts_from_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
     csv_file_path.write_text("a,b,c\n1,2,3\n4,5,6\n")
 
-    csv_file_accessor = create_csv_file_dict_accessor(csv_file_path)
+    csv_file_accessor = csv_file_dicts_accessor(csv_file_path)
 
     rows = []
     with csv_file_accessor.create_loader() as loader:
@@ -71,7 +68,7 @@ def test_load_rows_as_lists_from_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
     csv_file_path.write_text("a,b,c\n1,2,3\n4,5,6\n")
 
-    csv_file_accessor = create_csv_file_lists_accessor(csv_file_path)
+    csv_file_accessor = csv_file_lists_accessor(csv_file_path)
 
     rows = []
     with csv_file_accessor.create_loader() as loader:
@@ -87,7 +84,7 @@ def test_load_rows_as_lists_from_csv_file(tmp_path):
 def test_dump_dicts_as_rows_into_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
 
-    csv_file_accessor = create_csv_file_dict_accessor(csv_file_path)
+    csv_file_accessor = csv_file_dicts_accessor(csv_file_path)
 
     rows = [
         {"a": "1", "b": "2", "c": "3"},
@@ -104,7 +101,7 @@ def test_dump_dicts_as_rows_into_csv_file(tmp_path):
 def test_dump_lists_as_rows_into_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
 
-    csv_file_accessor = create_csv_file_lists_accessor(csv_file_path)
+    csv_file_accessor = csv_file_lists_accessor(csv_file_path)
 
     rows = [
         ["1", "2", "3"],

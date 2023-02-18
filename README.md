@@ -17,9 +17,9 @@ read a json from gzip compressed file:
 
 ```python
 from filesff.core.handlers import GzippedFileHandle
-from filesff.accessors.jsons import json_file
+from filesff.accessors.jsons import json_file_accessor
 
-accessor = json_file("/path/to/file.gz", GzippedFileHandle)
+accessor = json_file_accessor("/path/to/file.gz", GzippedFileHandle)
 
 accessor.dump({"json": "data"})
 ```
@@ -30,11 +30,11 @@ pip install fileff[protobuf]
 ```
 
 ```python
-from filesff.accessors.protobufs import protobuf_temp_file
+from filesff.accessors.protobufs import temp_protobuf_file_accessor
 
 from messages.v1.messages_pb2 import Message
 
-accessor = protobuf_temp_file(message_cls=Message)
+accessor = temp_protobuf_file_accessor(message_cls=Message)
 
 message = accessor.load()
 ```

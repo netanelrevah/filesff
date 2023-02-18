@@ -1,6 +1,5 @@
 from abc import ABC
-from collections.abc import Iterator
-from typing import IO, Any, Iterable
+from typing import IO, Any
 
 
 class FullFileFormatter:
