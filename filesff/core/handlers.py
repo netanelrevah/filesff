@@ -2,7 +2,7 @@ import bz2
 import gzip
 from dataclasses import dataclass
 from os import PathLike
-from typing import IO, BinaryIO, TextIO, Union, cast
+from typing import BinaryIO, TextIO
 
 from filesff.core.pointers import FilePointer, SimpleFilePointer, TemporaryFilePointer
 

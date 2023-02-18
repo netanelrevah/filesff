@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, Any, AnyStr, Generator, Iterator
+from typing import IO, Any, AnyStr, Iterator
 
 from filesff.core.formatters import FileFormatter, FullFileFormatter
 
