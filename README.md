@@ -16,11 +16,7 @@ pip install filesff
 read a json from gzip compressed file:
 
 ```python
-from filesff.core.handlers import GzippedFileHandle
-from filesff.accessors.jsons import json_file_accessor
-
-accessor = json_file_accessor("/path/to/file.gz", GzippedFileHandle)
-
+accessor = json_file_accessor("./file.gz", GzippedFileHandle)
 accessor.dump({"json": "data"})
 ```
 
@@ -30,34 +26,31 @@ pip install fileff[protobuf]
 ```
 
 ```python
-from filesff.accessors.protobufs import temp_protobuf_file_accessor
+from google.protobuf.timestamp_pb2 import Timestamp
 
-from messages.v1.messages_pb2 import Message
+accessor = temp_protobuf_file_accessor()
+now = Timestamp()
+now.FromDatetime(datetime.now())
+accessor.dump(now)
 
-accessor = temp_protobuf_file_accessor(message_cls=Message)
-
-message = accessor.load()
+loaded_now = accessor.load(message_cls=Timestamp)
 ```
 
 implement new file format:
 
 ```python
-from filesff.core.formatters import FileFormatter
-
-class NewFileFormatter(FileFormatter):
-    def load(self, reader: IO) -> AnyStr:
+class NewFileFormatter(FullFileFormatter):
+    def load(self, reader: IO, **_) -> AnyStr:
         return reader.read().replace("a", "e")
 
-    def dump(self, writer: IO, value: Any):
+    def dump(self, writer: IO, value: Any, **_):
         writer.write(value.replace("e", "a"))
 ```
 
 use it 
 ```python
-from filesff.core.accessors import FileAccessor
-
-file_accessor = FileAccessor.of("/a/file/path.ae", NewFileFormatter())
-file_accessor.load()
+file_accessor = FullFileAccessor.of("./path.ae", NewFileFormatter())
+file_accessor.dump("ababab")
 ```
 
 
