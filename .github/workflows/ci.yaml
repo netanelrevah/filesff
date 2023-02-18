@@ -12,6 +12,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: isort/isort-action@master
       - uses: psf/black@stable
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install ruff mypy
+      - run: ruff check --format=github .
+      - run: mypy filesff
   lint:
     runs-on: ${{ matrix.image }}
     name: ${{ matrix.os }} / ${{ matrix.python-version }}
@@ -75,8 +83,6 @@ jobs:
 
       - name: Install dependencies
         run: poetry install --with dev -E protobuf -E ujson
-
-      - run: poetry run mypy filesff
 
       - name: Run pytest
         run: poetry run pytest -v
