@@ -34,29 +34,29 @@ from filesff.accessors.protobufs import temp_protobuf_file_accessor
 
 from messages.v1.messages_pb2 import Message
 
-accessor = temp_protobuf_file_accessor(message_cls=Message)
+accessor = temp_protobuf_file_accessor()
 
-message = accessor.load()
+message = accessor.load(message_cls=Message)
 ```
 
 implement new file format:
 
 ```python
-from filesff.core.formatters import FileFormatter
+from filesff.core.formatters import FullFileFormatter
 
-class NewFileFormatter(FileFormatter):
-    def load(self, reader: IO) -> AnyStr:
+class NewFileFormatter(FullFileFormatter):
+    def load(self, reader: IO, **_) -> AnyStr:
         return reader.read().replace("a", "e")
 
-    def dump(self, writer: IO, value: Any):
+    def dump(self, writer: IO, value: Any, **_):
         writer.write(value.replace("e", "a"))
 ```
 
 use it 
 ```python
-from filesff.core.accessors import FileAccessor
+from filesff.core.accessors import FullFileAccessor
 
-file_accessor = FileAccessor.of("/a/file/path.ae", NewFileFormatter())
+file_accessor = FullFileAccessor.of("/a/file/path.ae", NewFileFormatter())
 file_accessor.load()
 ```
 

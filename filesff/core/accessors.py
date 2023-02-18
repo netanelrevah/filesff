@@ -12,13 +12,13 @@ class FullFileAccessor:
     handle: FileHandle
     formatter: FullFileFormatter
 
-    def load(self):
+    def load(self, **kwargs):
         with self.handle.create_text_reader() as reader:
-            return self.formatter.load(reader)
+            return self.formatter.load(reader, **kwargs)
 
-    def dump(self, value: Any):
+    def dump(self, value: Any, **kwargs):
         with self.handle.create_text_writer() as writer:
-            return self.formatter.dump(writer, value)
+            return self.formatter.dump(writer, value, **kwargs)
 
     @classmethod
     def of(
@@ -40,9 +40,9 @@ class FileAccessor(FullFileAccessor):
     formatter: FileFormatter
 
     @contextmanager
-    def create_loader(self) -> Iterator[Any]:
+    def create_loader(self, **kwargs) -> Iterator[Any]:
         with self.handle.create_text_reader() as reader:
-            yield self.formatter.create_loader(reader)
+            yield self.formatter.create_loader(reader, **kwargs)
 
     @contextmanager
     def create_dumper(self, **kwargs):
