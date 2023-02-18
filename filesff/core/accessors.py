@@ -35,17 +35,9 @@ class FullFileAccessor:
 
 
 @dataclass
-class FileAccessor:
+class FileAccessor(FullFileAccessor):
     handle: FileHandle
     formatter: FileFormatter
-
-    def load(self):
-        with self.handle.create_text_reader() as reader:
-            yield self.formatter.load(reader)
-
-    def dump(self, value: List[Any]):
-        with self.handle.create_text_reader() as writer:
-            return self.formatter.dump(writer, value)
 
     @contextmanager
     def create_loader(self) -> Iterator[Any]:
@@ -56,16 +48,3 @@ class FileAccessor:
     def create_dumper(self, **kwargs):
         with self.handle.create_text_writer() as writer:
             yield self.formatter.create_dumper(writer, **kwargs)
-
-    @classmethod
-    def of(
-        cls,
-        file_path: str | PathLike[str],
-        formatter: FileFormatter,
-        file_handle_cls: Type[FileHandle] = FileHandle,
-    ):
-        return cls(file_handle_cls.of(file_path), formatter)
-
-    @classmethod
-    def of_temp(cls, formatter: FileFormatter, file_handle_cls: Type[FileHandle] = FileHandle):
-        return cls(file_handle_cls.of_temp(), formatter)
