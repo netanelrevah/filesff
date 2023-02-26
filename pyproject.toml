@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "filesff"
-version = "0.0.3"
+version = "0.0.4"
 description = "Files for Fun; Python Utilities"
 authors = ["Netanel Revah <netanelrevah@outlook.com>"]
 license = "MIT License"
