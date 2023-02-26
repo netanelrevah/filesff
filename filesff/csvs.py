@@ -2,9 +2,11 @@ from csv import DictReader, DictWriter
 from csv import reader as csv_reader
 from csv import writer as csv_writer
 from dataclasses import dataclass
-from typing import IO, Any, Iterator, Sequence
+from typing import Any, Iterator, Sequence, TextIO
 
-from filesff.core.formatters import FileFormatter, FullFileFormatter
+from filesff.core.accessors import FileAccessor
+from filesff.core.formatters import TextFileFormatter
+from filesff.core.handlers import FileHandle
 
 
 @dataclass
@@ -35,19 +37,19 @@ class CsvFileDictDumper:
 
 
 @dataclass
-class CsvFileDictFormatter(FileFormatter):
-    def load(self, reader: IO, **kwargs) -> Any:
+class CsvFileDictFormatter(TextFileFormatter):
+    def load(self, reader: TextIO, **kwargs) -> Any:
         return CsvFileListsLoader(csv_reader(reader))
 
-    def dump(self, writer: IO, value: Any, **kwargs):
+    def dump(self, writer: TextIO, value: Any, **kwargs):
         fields_names = kwargs["fields_names"]
         line_terminator = kwargs.get("line_terminator", "\n")
         return CsvFileListsDumper(csv_writer(writer, lineterminator=line_terminator), fields_names=fields_names)
 
-    def create_loader(self, reader: IO, **_) -> CsvFileDictsLoader:
+    def create_loader(self, reader: TextIO, **_) -> CsvFileDictsLoader:
         return CsvFileDictsLoader(DictReader(reader))
 
-    def create_dumper(self, writer: IO, **kwargs):
+    def create_dumper(self, writer: TextIO, **kwargs):
         fields_names = kwargs["fields_names"]
         line_terminator = kwargs.get("line_terminator", "\n")
         return CsvFileDictDumper(DictWriter(writer, fieldnames=fields_names, lineterminator=line_terminator))
@@ -87,23 +89,53 @@ class CsvFileListsDumper:
 
 
 @dataclass
-class CsvFileListsFormatter(FileFormatter, FullFileFormatter):
-    def create_loader(self, reader: IO, **_) -> CsvFileListsLoader:
+class CsvFileListsFormatter(TextFileFormatter):
+    def create_loader(self, reader: TextIO, **_) -> CsvFileListsLoader:
         return CsvFileListsLoader(csv_reader(reader))
 
-    def create_dumper(self, writer: IO, **kwargs):
+    def create_dumper(self, writer: TextIO, **kwargs):
         fields_names = kwargs["fields_names"]
         line_terminator = kwargs.get("line_terminator", "\n")
         return CsvFileListsDumper(csv_writer(writer, lineterminator=line_terminator), fields_names=fields_names)
 
-    def load(self, reader: IO, **_) -> Iterator[list]:
+    def load(self, reader: TextIO, **_) -> Iterator[list]:
         loader = self.create_loader(reader)
         if loader.fields_names:
             yield loader.fields_names
         yield from loader
 
-    def dump(self, writer: IO, value: Sequence[list], **kwargs):
+    def dump(self, writer: TextIO, value: Sequence[list], **kwargs):
         dumper = self.create_dumper(writer, **kwargs)
         dumper.dump_header()
         for row in value:
             dumper.dump_row(row)
+
+
+def csv_file_dicts_accessor(file_path, file_handle_cls=FileHandle):
+    return FileAccessor.of(
+        file_path=file_path,
+        formatter=CsvFileDictFormatter(),
+        file_handle_cls=file_handle_cls,
+    )
+
+
+def temp_csv_file_dicts_accessor(file_handle_cls=FileHandle):
+    return FileAccessor.of_temp(
+        formatter=CsvFileDictFormatter(),
+        file_handle_cls=file_handle_cls,
+    )
+
+
+def csv_file_lists_accessor(file_path, file_handle_cls=FileHandle):
+    return FileAccessor.of(
+        file_path=file_path,
+        formatter=CsvFileListsFormatter(),
+        file_handle_cls=file_handle_cls,
+    )
+
+
+def temp_csv_file_lists_accessor(file_handle_cls=FileHandle):
+    return FileAccessor.of_temp(
+        formatter=CsvFileListsFormatter(),
+        file_handle_cls=file_handle_cls,
+    )
