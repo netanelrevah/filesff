@@ -20,6 +20,23 @@ tests = ["attrs[tests-no-zope]", "zope.interface"]
 tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy (>=0.971,<0.990)", "mypy (>=0.971,<0.990)", "pympler", "pympler", "pytest (>=4.3.0)", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-mypy-plugins", "pytest-xdist[psutil]", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "bidict"
+version = "0.22.1"
+description = "The bidirectional mapping library for Python."
+category = "main"
+optional = true
+python-versions = ">=3.7"
+files = [
+    {file = "bidict-0.22.1-py3-none-any.whl", hash = "sha256:6ef212238eb884b664f28da76f33f1d28b260f665fc737b413b287d5487d1e7b"},
+    {file = "bidict-0.22.1.tar.gz", hash = "sha256:1e0f7f74e4860e6d0943a05d4134c63a2fad86f3d4732fb265bd79e4e856d81d"},
+]
+
+[package.extras]
+docs = ["furo", "sphinx", "sphinx-copybutton"]
+lint = ["pre-commit"]
+test = ["hypothesis", "pytest", "pytest-benchmark[histogram]", "pytest-cov", "pytest-xdist", "sortedcollections", "sortedcontainers", "sphinx"]
+
+[[package]]
 name = "black"
 version = "23.1.0"
 description = "The uncompromising code formatter."
@@ -67,6 +84,21 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.7.4)"]
 jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
+
+[[package]]
+name = "cap"
+version = "0.1.3"
+description = "Cap: lightweight package for use network captures"
+category = "main"
+optional = true
+python-versions = ">=3.10,<4.0"
+files = [
+    {file = "cap-0.1.3-py3-none-any.whl", hash = "sha256:baed519d3831d757a0c8085e9bd079ede11fade349fcf70d73606fdde0373036"},
+    {file = "cap-0.1.3.tar.gz", hash = "sha256:0da27c17e2be0f21d4bc85e065bb43cb3a5cf57d6bd82b760ebeb419639e8d99"},
+]
+
+[package.dependencies]
+bidict = ">=0.22.1,<0.23.0"
 
 [[package]]
 name = "click"
@@ -420,26 +452,26 @@ files = [
 
 [[package]]
 name = "types-protobuf"
-version = "4.21.0.6"
+version = "4.21.0.7"
 description = "Typing stubs for protobuf"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-protobuf-4.21.0.6.tar.gz", hash = "sha256:8c105b906569e9d53ba033465880d9ef17a59bf3ba8ab656d24c9eadb9d8a056"},
-    {file = "types_protobuf-4.21.0.6-py3-none-any.whl", hash = "sha256:39167012ead0bc5920b6322a1e4dc2d088f66a34b84cce39bb88500e49ac955a"},
+    {file = "types-protobuf-4.21.0.7.tar.gz", hash = "sha256:6ecaddcc7aed2c636745a17c1411932cdef7a035304d50ffd4140297b6b882e8"},
+    {file = "types_protobuf-4.21.0.7-py3-none-any.whl", hash = "sha256:5f4c0ba5840d66a9f32bcfd153a5d41c503f409223eae4fda876cdd6b50a638a"},
 ]
 
 [[package]]
 name = "types-ujson"
-version = "5.7.0.0"
+version = "5.7.0.1"
 description = "Typing stubs for ujson"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-ujson-5.7.0.0.tar.gz", hash = "sha256:d7c001f668a2e1ac2decbafd2c42cc0bf58798a5cc3b5a3ee397b7ee37775919"},
-    {file = "types_ujson-5.7.0.0-py3-none-any.whl", hash = "sha256:ad48848c3da10e8023e9e75b1833282c28568ea680938c271e34d4d1426be816"},
+    {file = "types-ujson-5.7.0.1.tar.gz", hash = "sha256:54351a62ec1b6550efb17af63ef7f0c00d0efa9c099de7da5c627e1efa280553"},
+    {file = "types_ujson-5.7.0.1-py3-none-any.whl", hash = "sha256:67cdedbab6ea905f21e236497e9e97d8f7f0845d72b47a7404974dcb88adeb22"},
 ]
 
 [[package]]
@@ -530,10 +562,11 @@ files = [
 ]
 
 [extras]
+cap = ["cap"]
 protobuf = ["protobuf"]
 ujson = ["ujson"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "4eaa5da689a26eb0a381fb20461e577f79b651ea47105c975730b61677dca7ff"
+content-hash = "3ce43655777fa3552cfd1538163e32169fb46d6fd84cddc3b16e443dbde461b4"

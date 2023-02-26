@@ -29,7 +29,7 @@ class FileHandle:
     def create_bytes_writer(self) -> BinaryIO:
         return self.open(mode="wb")
 
-    def create_bytes_reader(self) -> BinaryIO:
+    def create_binary_reader(self) -> BinaryIO:
         return self.open(mode="rb")
 
     @classmethod

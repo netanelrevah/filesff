@@ -1,7 +1,7 @@
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-from filesff.accessors.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
+from filesff.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
 from filesff.core.handlers import GzippedFileHandle
 from filesff.core.pointers import TemporaryFilePointer
 
@@ -39,7 +39,7 @@ def test_gzip_file():
     with handle.create_text_reader() as reader:
         assert reader.read() == "blablabla"
 
-    with handle.create_bytes_reader() as reader:
+    with handle.create_binary_reader() as reader:
         assert reader.read() == b"blablabla"
 
     with handle.create_compressed_reader() as reader:
