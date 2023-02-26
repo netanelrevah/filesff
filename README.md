@@ -39,11 +39,11 @@ loaded_now = accessor.load(message_cls=Timestamp)
 implement new file format:
 
 ```python
-class NewFileFormatter(FullFileFormatter):
-    def load(self, reader: IO, **_) -> AnyStr:
+class NewFileFormatter(FullTextFileFormatter):
+    def load(self, reader: TextIO, **_) -> AnyStr:
         return reader.read().replace("a", "e")
 
-    def dump(self, writer: IO, value: Any, **_):
+    def dump(self, writer: TextIO, value: Any, **_):
         writer.write(value.replace("e", "a"))
 ```
 
