@@ -1,9 +1,9 @@
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-from filesff.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
 from filesff.core.handlers import GzippedFileHandle
 from filesff.core.pointers import TemporaryFilePointer
+from filesff.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
 
 
 def test_context_manager_temp_file():
