@@ -23,7 +23,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with dev -E protobuf -E ujson --no-interaction --no-root
+        run: poetry install --with dev --all-extras --no-interaction --no-root
       - run: poetry check
       - run: poetry lock --check
       - run: poetry run ruff check --format=github .
@@ -62,7 +62,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with dev -E protobuf -E ujson --no-interaction --no-root
+        run: poetry install --with dev --all-extras --no-interaction --no-root
 
       - run: poetry install --no-interaction
 
