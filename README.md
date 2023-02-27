@@ -1,6 +1,6 @@
 # FilesFF - Files For Fun
 
-[![PyPI version](https://img.shields.io/pypi/v/fileff.svg)](https://pypi.python.org/pypi/filesff/) [![PyPI downloads](https://img.shields.io/pypi/dm/filesff.svg)](https://pypi.python.org/pypi/filesff/)
+[![PyPI version](https://img.shields.io/pypi/v/filesff.svg)](https://pypi.python.org/pypi/filesff/) [![PyPI downloads](https://img.shields.io/pypi/dm/filesff.svg)](https://pypi.python.org/pypi/filesff/)
 
 * python package to work with file handles
 * use handles of files as parameters without keeping open files
