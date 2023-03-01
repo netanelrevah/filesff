@@ -17,7 +17,7 @@ msgpack = {version = "^1.0.4", optional = true}
 pytest = "^7.2.0"
 pytest-tstcls = { git = "https://github.com/netanelrevah/tstcls" }
 pytest-parametrization = "^2022.2.1"
-mypy = "^0.991"
+mypy = ">=0.991,<1.1"
 types-protobuf = "^4.21.0.3"
 types-ujson = "^5.7.0.0"
 black = "*"
