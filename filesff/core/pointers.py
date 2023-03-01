@@ -18,8 +18,12 @@ class FilePointer:
         return self.path.exists()
 
 
+class FolderPointer:
+    pass
+
+
 @dataclass
-class SimpleFilePointer(FilePointer):
+class FSFilePointer(FilePointer):
     _path: Path
 
     @property
@@ -32,7 +36,7 @@ class SimpleFilePointer(FilePointer):
 
 
 @dataclass
-class TemporaryFilePointer(SimpleFilePointer):
+class TemporaryFilePointer(FSFilePointer):
     should_delete: bool
 
     def __enter__(self) -> "TemporaryFilePointer":

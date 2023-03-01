@@ -4,12 +4,12 @@ from typing import BinaryIO, Iterator, Sequence
 from cap import CapFileDumper, CapFileLoader, CapturedPacket
 
 from filesff.core.accessors import FileAccessor
-from filesff.core.formatters import FullBinaryFileFormatter
-from filesff.core.handlers import FileHandle
+from filesff.core.formatters import BinaryFileFormatter
+from filesff.core.handlers import FSFileHandle
 
 
 @dataclass
-class CapFileFormatter(FullBinaryFileFormatter):
+class CapFileFormatter(BinaryFileFormatter):
     def create_loader(self, reader: BinaryIO, **_) -> CapFileLoader:
         return CapFileLoader(reader)
 
@@ -27,7 +27,7 @@ class CapFileFormatter(FullBinaryFileFormatter):
             dumper.dump_packet(captured_packet)
 
 
-def cap_file_accessor(file_path, file_handle_cls=FileHandle):
+def cap_file_accessor(file_path, file_handle_cls=FSFileHandle):
     return FileAccessor.of(
         file_path=file_path,
         formatter=CapFileFormatter(),
@@ -35,7 +35,7 @@ def cap_file_accessor(file_path, file_handle_cls=FileHandle):
     )
 
 
-def temp_cap_file_accessor(file_handle_cls=FileHandle):
+def temp_cap_file_accessor(file_handle_cls=FSFileHandle):
     return FileAccessor.of_temp(
         formatter=CapFileFormatter(),
         file_handle_cls=file_handle_cls,

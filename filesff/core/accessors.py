@@ -9,7 +9,7 @@ from filesff.core.formatters import (
     FullTextFileFormatter,
     TextFileFormatter,
 )
-from filesff.core.handlers import FileHandle
+from filesff.core.handlers import FileHandle, FSFileHandle
 
 
 @dataclass
@@ -35,13 +35,15 @@ class FullFileAccessor:
         cls,
         file_path: str | PathLike[str],
         formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[FileHandle] = FileHandle,
+        file_handle_cls: Type[FSFileHandle] = FSFileHandle,
     ):
         return cls(file_handle_cls.of(file_path), formatter)
 
     @classmethod
     def of_temp(
-        cls, formatter: FullBinaryFileFormatter | FullTextFileFormatter, file_handle_cls: Type[FileHandle] = FileHandle
+        cls,
+        formatter: FullBinaryFileFormatter | FullTextFileFormatter,
+        file_handle_cls: Type[FSFileHandle] = FSFileHandle,
     ):
         return cls(file_handle_cls.of_temp(), formatter)
 
