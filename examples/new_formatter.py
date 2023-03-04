@@ -2,14 +2,15 @@ from datetime import datetime
 
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from filesff.core.handlers import GzippedFileHandle
-from filesff.jsons import json_file_accessor
-from filesff.protobufs import temp_protobuf_file_accessor
+from filesff.gzips import GzippedFileHandle
+from filesff.jsons import JsonFormatter
+from filesff.paths import PathFileHandle
+from filesff.protobufs import ProtoBytesFileFormatter
 
-accessor = json_file_accessor("./file.gz", GzippedFileHandle)
+accessor = GzippedFileHandle.of_str("./file.gz").access(JsonFormatter())
 accessor.dump({"json": "data"})
 
-accessor = temp_protobuf_file_accessor()
+accessor = PathFileHandle.of_temp().access(ProtoBytesFileFormatter)
 now = Timestamp()
 now.FromDatetime(datetime.now())
 accessor.dump(now)

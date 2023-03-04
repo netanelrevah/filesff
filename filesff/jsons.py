@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, AnyStr, Iterator, TextIO
 
-from filesff.core.accessors import FileAccessor, FullFileAccessor
 from filesff.core.formatters import FullTextFileFormatter, TextFileFormatter
-from filesff.paths import PathFileHandle
 
 try:
     import ujson as json
@@ -13,7 +11,7 @@ except ImportError:
 
 @dataclass
 class JsonFormatter(FullTextFileFormatter):
-    indentation: int
+    indentation: int = 2
 
     def load(self, reader: TextIO, **_) -> AnyStr:
         return json.load(fp=reader)
@@ -54,33 +52,3 @@ class JsonLinesFormatter(TextFileFormatter):
         dumper = self.create_dumper(writer)
         for message in value:
             dumper.dump_object(message)
-
-
-def json_file_accessor(file_path, file_handle_cls=PathFileHandle, indentation=2):
-    return FullFileAccessor.of_path(
-        file_path=file_path,
-        formatter=JsonFormatter(indentation=indentation),
-        file_handle_cls=file_handle_cls,
-    )
-
-
-def temp_json_file_accessor(file_handle_cls=PathFileHandle, indentation=2):
-    return FullFileAccessor.of_temp(
-        formatter=JsonFormatter(indentation=indentation),
-        file_handle_cls=file_handle_cls,
-    )
-
-
-def json_lines_file_accessor(file_path, file_handle_cls=PathFileHandle):
-    return FileAccessor.of_path(
-        file_path=file_path,
-        formatter=JsonLinesFormatter(),
-        file_handle_cls=file_handle_cls,
-    )
-
-
-def temp_json_lines_file_accessor(file_handle_cls=PathFileHandle):
-    return FileAccessor.of_temp(
-        formatter=JsonLinesFormatter(),
-        file_handle_cls=file_handle_cls,
-    )

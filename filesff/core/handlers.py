@@ -1,6 +1,14 @@
 from io import TextIOWrapper
 from typing import BinaryIO, TextIO
 
+from filesff.core.accessors import FileAccessor, FullFileAccessor
+from filesff.core.formatters import (
+    BinaryFileFormatter,
+    FullBinaryFileFormatter,
+    FullTextFileFormatter,
+    TextFileFormatter,
+)
+
 
 class ReadableFileHandle:
     def create_binary_reader(self) -> BinaryIO:
@@ -19,7 +27,10 @@ class WriteableFileHandle:
 
 
 class FileHandle(ReadableFileHandle, WriteableFileHandle):
-    pass
+    def access(self, formatter: FullBinaryFileFormatter | FullTextFileFormatter) -> FullFileAccessor:
+        if isinstance(formatter, BinaryFileFormatter) or isinstance(formatter, TextFileFormatter):
+            return FileAccessor(self, formatter)
+        return FullFileAccessor(self, formatter)
 
 
 class OpenableFileHandle(FileHandle):

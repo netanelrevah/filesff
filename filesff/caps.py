@@ -3,9 +3,7 @@ from typing import BinaryIO, Iterator, Sequence
 
 from cap import CapFileDumper, CapFileLoader, CapturedPacket
 
-from filesff.core.accessors import FileAccessor
 from filesff.core.formatters import BinaryFileFormatter
-from filesff.paths import PathFileHandle
 
 
 @dataclass
@@ -25,18 +23,3 @@ class CapFileFormatter(BinaryFileFormatter):
         dumper.dump_header()
         for captured_packet in value:
             dumper.dump_packet(captured_packet)
-
-
-def cap_file_accessor(file_path, file_handle_cls=PathFileHandle):
-    return FileAccessor.of_path(
-        file_path=file_path,
-        formatter=CapFileFormatter(),
-        file_handle_cls=file_handle_cls,
-    )
-
-
-def temp_cap_file_accessor(file_handle_cls=PathFileHandle):
-    return FileAccessor.of_temp(
-        formatter=CapFileFormatter(),
-        file_handle_cls=file_handle_cls,
-    )
