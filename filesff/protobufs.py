@@ -10,7 +10,7 @@ from filesff.core.formatters import (
     FullTextFileFormatter,
     TextFileFormatter,
 )
-from filesff.core.handlers import FSFileHandle
+from filesff.core.handlers import PathFileHandle
 
 
 @dataclass
@@ -70,45 +70,45 @@ class ProtoJsonLinesFileFormatter(TextFileFormatter):
             dumper.dump_message(message)
 
 
-def protobuf_file_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FullFileAccessor.of(
+def protobuf_file_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FullFileAccessor.of_path(
         file_path,
         ProtoBytesFileFormatter(),
         file_handle_cls,
     )
 
 
-def temp_protobuf_file_accessor(file_handle_cls=FSFileHandle):
+def temp_protobuf_file_accessor(file_handle_cls=PathFileHandle):
     return FullFileAccessor.of_temp(
         ProtoBytesFileFormatter(),
         file_handle_cls,
     )
 
 
-def protojson_file_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FullFileAccessor.of(
+def protojson_file_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FullFileAccessor.of_path(
         file_path,
         ProtoJsonFileFormatter(),
         file_handle_cls,
     )
 
 
-def temp_protojson_file_accessor(file_handle_cls=FSFileHandle):
+def temp_protojson_file_accessor(file_handle_cls=PathFileHandle):
     return FullFileAccessor.of_temp(
         ProtoJsonFileFormatter(),
         file_handle_cls,
     )
 
 
-def protojson_lines_file_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FileAccessor.of(
+def protojson_lines_file_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FileAccessor.of_path(
         file_path,
         ProtoJsonLinesFileFormatter(),
         file_handle_cls,
     )
 
 
-def temp_protojson_lines_file_accessor(file_handle_cls=FSFileHandle):
+def temp_protojson_lines_file_accessor(file_handle_cls=PathFileHandle):
     return FileAccessor.of_temp(
         ProtoJsonLinesFileFormatter(),
         file_handle_cls,

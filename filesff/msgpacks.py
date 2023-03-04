@@ -5,7 +5,7 @@ import msgpack
 
 from filesff.core.accessors import FileAccessor
 from filesff.core.formatters import FullBinaryFileFormatter
-from filesff.core.handlers import FSFileHandle
+from filesff.core.handlers import PathFileHandle
 
 
 @dataclass
@@ -17,15 +17,15 @@ class MsgPackFileFormatter(FullBinaryFileFormatter):
         msgpack.dump(value, writer, **kwargs)
 
 
-def msgpack_file_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FileAccessor.of(
+def msgpack_file_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FileAccessor.of_path(
         file_path=file_path,
         formatter=MsgPackFileFormatter(),
         file_handle_cls=file_handle_cls,
     )
 
 
-def temp_msgpack_file_accessor(file_handle_cls=FSFileHandle):
+def temp_msgpack_file_accessor(file_handle_cls=PathFileHandle):
     return FileAccessor.of_temp(
         formatter=MsgPackFileFormatter(),
         file_handle_cls=file_handle_cls,

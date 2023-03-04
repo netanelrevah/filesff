@@ -6,7 +6,7 @@ from typing import Any, Iterator, Sequence, TextIO
 
 from filesff.core.accessors import FileAccessor
 from filesff.core.formatters import TextFileFormatter
-from filesff.core.handlers import FSFileHandle
+from filesff.core.handlers import PathFileHandle
 
 
 @dataclass
@@ -111,30 +111,30 @@ class CsvFileListsFormatter(TextFileFormatter):
             dumper.dump_row(row)
 
 
-def csv_file_dicts_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FileAccessor.of(
+def csv_file_dicts_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FileAccessor.of_path(
         file_path=file_path,
         formatter=CsvFileDictFormatter(),
         file_handle_cls=file_handle_cls,
     )
 
 
-def temp_csv_file_dicts_accessor(file_handle_cls=FSFileHandle):
+def temp_csv_file_dicts_accessor(file_handle_cls=PathFileHandle):
     return FileAccessor.of_temp(
         formatter=CsvFileDictFormatter(),
         file_handle_cls=file_handle_cls,
     )
 
 
-def csv_file_lists_accessor(file_path, file_handle_cls=FSFileHandle):
-    return FileAccessor.of(
+def csv_file_lists_accessor(file_path, file_handle_cls=PathFileHandle):
+    return FileAccessor.of_path(
         file_path=file_path,
         formatter=CsvFileListsFormatter(),
         file_handle_cls=file_handle_cls,
     )
 
 
-def temp_csv_file_lists_accessor(file_handle_cls=FSFileHandle):
+def temp_csv_file_lists_accessor(file_handle_cls=PathFileHandle):
     return FileAccessor.of_temp(
         formatter=CsvFileListsFormatter(),
         file_handle_cls=file_handle_cls,

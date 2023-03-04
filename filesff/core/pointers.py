@@ -23,20 +23,20 @@ class FolderPointer:
 
 
 @dataclass
-class FSFilePointer(FilePointer):
-    _path: Path
-
-    @property
-    def path(self) -> Path:
-        return self._path
+class PathFilePointer(FilePointer):
+    path: Path
 
     @classmethod
-    def of(cls, path: str | PathLike[str]):
+    def of_str(cls, path: str | PathLike[str]):
         return cls(Path(path))
 
 
+class S3KeyPointer(FilePointer):
+    pass
+
+
 @dataclass
-class TemporaryFilePointer(FSFilePointer):
+class TemporaryFilePointer(PathFilePointer):
     should_delete: bool
 
     def __enter__(self) -> "TemporaryFilePointer":

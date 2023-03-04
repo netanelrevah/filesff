@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 from os import PathLike
+from pathlib import Path
 from typing import Any, Iterator, Type
 
 from filesff.core.formatters import (
@@ -9,7 +10,7 @@ from filesff.core.formatters import (
     FullTextFileFormatter,
     TextFileFormatter,
 )
-from filesff.core.handlers import FileHandle, FSFileHandle
+from filesff.core.handlers import FileHandle, PathFileHandle
 
 
 @dataclass
@@ -31,19 +32,28 @@ class FullFileAccessor:
         raise TypeError()
 
     @classmethod
-    def of(
+    def of_path(
+        cls,
+        file_path: Path,
+        formatter: FullBinaryFileFormatter | FullTextFileFormatter,
+        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
+    ):
+        return cls(file_handle_cls.of_str(file_path), formatter)
+
+    @classmethod
+    def of_str(
         cls,
         file_path: str | PathLike[str],
         formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[FSFileHandle] = FSFileHandle,
+        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
     ):
-        return cls(file_handle_cls.of(file_path), formatter)
+        return cls(file_handle_cls.of_str(file_path), formatter)
 
     @classmethod
     def of_temp(
         cls,
         formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[FSFileHandle] = FSFileHandle,
+        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
     ):
         return cls(file_handle_cls.of_temp(), formatter)
 
