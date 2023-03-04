@@ -31,10 +31,6 @@ class PathFilePointer(FilePointer):
         return cls(Path(path))
 
 
-class S3KeyPointer(FilePointer):
-    pass
-
-
 @dataclass
 class TemporaryFilePointer(PathFilePointer):
     should_delete: bool
