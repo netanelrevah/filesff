@@ -10,7 +10,7 @@ from filesff.core.formatters import (
     FullTextFileFormatter,
     TextFileFormatter,
 )
-from filesff.core.handlers import PathFileHandle
+from filesff.paths import PathFileHandle
 
 
 @dataclass

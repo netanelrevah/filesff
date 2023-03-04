@@ -3,7 +3,7 @@ from typing import Any, AnyStr, Iterator, TextIO
 
 from filesff.core.accessors import FileAccessor, FullFileAccessor
 from filesff.core.formatters import FullTextFileFormatter, TextFileFormatter
-from filesff.core.handlers import PathFileHandle
+from filesff.paths import PathFileHandle
 
 try:
     import ujson as json

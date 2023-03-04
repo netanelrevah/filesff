@@ -1,10 +1,5 @@
-from bz2 import BZ2File
-from dataclasses import dataclass
-from gzip import GzipFile
 from io import TextIOWrapper
-from os import PathLike
-from pathlib import Path
-from typing import BinaryIO, TextIO, cast
+from typing import BinaryIO, TextIO
 
 
 class ReadableFileHandle:
@@ -42,42 +37,3 @@ class OpenableFileHandle(FileHandle):
 
     def create_binary_reader(self) -> BinaryIO:
         return self.open(mode="rb")
-
-
-@dataclass
-class PipeFileHandle(FileHandle):
-    file_handle: FileHandle
-
-    @classmethod
-    def of_path(cls, path: Path):
-        return cls(file_handle=PathFileHandle.of(path))
-
-    @classmethod
-    def of_str(cls, path: str | PathLike[str]):
-        return cls(PathFileHandle.of_str(path))
-
-    @classmethod
-    def of_temp(cls):
-        return cls(PathFileHandle.of_temp())
-
-
-class GzippedFileHandle(PipeFileHandle):
-    def create_binary_reader(self) -> BinaryIO:
-        return cast(
-            BinaryIO,
-            GzipFile(fileobj=self.file_handle.create_binary_reader(), mode="r"),
-        )
-
-    def create_binary_writer(self) -> BinaryIO:
-        return cast(
-            BinaryIO,
-            GzipFile(fileobj=self.file_handle.create_binary_reader(), mode="w"),
-        )
-
-
-class BZip2FileHandle(PipeFileHandle, OpenableFileHandle):
-    def create_binary_reader(self) -> BinaryIO:
-        return cast(BinaryIO, BZ2File(filename=self.file_handle.create_binary_reader(), mode="r"))
-
-    def create_binary_writer(self) -> BinaryIO:
-        return cast(BinaryIO, BZ2File(filename=self.file_handle.create_binary_reader(), mode="w"))

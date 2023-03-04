@@ -6,7 +6,7 @@ from typing import Any, Iterator, Sequence, TextIO
 
 from filesff.core.accessors import FileAccessor
 from filesff.core.formatters import TextFileFormatter
-from filesff.core.handlers import PathFileHandle
+from filesff.paths import PathFileHandle
 
 
 @dataclass
