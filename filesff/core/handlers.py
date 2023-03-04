@@ -11,62 +11,45 @@ from filesff.core.pointers import (
     TemporaryFilePointer,
 )
 
+class S3KeyPointer(FilePointer):
+    pass
 
-class FileHandle:
-    @property
-    def pointer(self) -> FilePointer:
-        raise NotImplementedError()
-
-    def create_binary_writer(self) -> BinaryIO:
-        raise NotImplementedError()
-
+class ReadableFileHandle:
     def create_binary_reader(self) -> BinaryIO:
         raise NotImplementedError()
-
-    def create_text_writer(self) -> TextIO:
-        raise NotImplementedError()
-
     def create_text_reader(self) -> TextIO:
         raise NotImplementedError()
-
-
-@dataclass
-class FolderHandler:
-    def get_file(self, file_pointer: FilePointer) -> FileHandle:
+        
+class WriteableFileHandle
+    def create_binary_writer(self) -> BinaryIO:
         raise NotImplementedError()
-
-    def get_folder(self, folder_pointer: FolderPointer) -> "FolderHandler":
+    def create_text_writer(self) -> TextIO:
         raise NotImplementedError()
-
 
 class OpenableFileHandle(FileHandle):
-    def open(self, mode) -> TextIO | BinaryIO:
+    def open(self, *args, **kwargs):
         raise NotImplementedError()
 
     def create_text_writer(self) -> TextIO:
-        return cast(TextIO, self.open(mode="wt"))
+        return self.open(mode="wt")
 
     def create_text_reader(self) -> TextIO:
-        return cast(TextIO, self.open(mode="rt"))
+        return self.open(mode="rt")
 
     def create_binary_writer(self) -> BinaryIO:
-        return cast(BinaryIO, self.open(mode="wb"))
+        return self.open(mode="wb")
 
     def create_binary_reader(self) -> BinaryIO:
-        return cast(BinaryIO, self.open(mode="rb"))
+        return self.open(mode="rb")
 
 
 @dataclass
-class FSFileHandle(OpenableFileHandle):
-    _pointer: FSFilePointer
-
-    @property
-    def pointer(self) -> FilePointer:
-        return self._pointer
+class PathFileHandle(OpenableFileHandle):
+    pointer: FSFilePointer
 
     def open(self, mode) -> TextIO | BinaryIO:
         return open(self.pointer.path, mode=mode)
-
+        
     def create_empty_file(self):
         if not self.pointer.path.exists():
             self.create_text_writer()
@@ -81,29 +64,19 @@ class FSFileHandle(OpenableFileHandle):
 
 
 @dataclass
-class CompressedFileHandle(OpenableFileHandle):
+class PipeFileHandle(FileHandle):
     file_handle: FileHandle
 
-    def create_compressed_reader(self) -> BinaryIO:
-        return self.file_handle.create_binary_reader()
-
-    def create_compressed_writer(self) -> BinaryIO:
-        return self.file_handle.create_binary_writer()
-
     @classmethod
-    def of(cls, path: str | PathLike[str]):
-        return cls(file_handle=FSFileHandle.of(path))
-
-    @classmethod
-    def of_temp(cls):
-        return cls(file_handle=FSFileHandle.of_temp())
+    def of_path(cls, path: str | PathLike[str]):
+        return cls(file_handle=PathFileHandle.of(path))
 
 
-class GzippedFileHandle(CompressedFileHandle):
+class GzippedFileHandle(PipeFileHandle):
     def open(self, mode):
-        return gzip.open(self.file_handle.pointer.path, mode=mode)
+        return gzip.open(fileobj=self.file_handle.create_binary_reader())
 
 
-class BZip2FileHandle(CompressedFileHandle):
+class BZip2FileHandle(PipeFileHandle):
     def open(self, mode):
-        return bz2.open(self.file_handle.pointer.path, mode=mode)
+        return bz2.open(fileobj=self.file_handle.create_binary_reader(),mode)
