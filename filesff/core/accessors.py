@@ -32,32 +32,6 @@ class FullFileAccessor:
                 return self.formatter.dump(writer, value, **kwargs)
         raise TypeError()
 
-    @classmethod
-    def of_path(
-        cls,
-        file_path: Path,
-        formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
-    ):
-        return cls(file_handle_cls.of_str(file_path), formatter)
-
-    @classmethod
-    def of_str(
-        cls,
-        file_path: str | PathLike[str],
-        formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
-    ):
-        return cls(file_handle_cls.of_str(file_path), formatter)
-
-    @classmethod
-    def of_temp(
-        cls,
-        formatter: FullBinaryFileFormatter | FullTextFileFormatter,
-        file_handle_cls: Type[PathFileHandle] = PathFileHandle,
-    ):
-        return cls(file_handle_cls.of_temp(), formatter)
-
 
 @dataclass
 class FileAccessor(FullFileAccessor):
