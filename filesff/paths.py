@@ -13,6 +13,9 @@ from filesff.core.pointers import FilePointer
 class PathFilePointer(FilePointer):
     path: Path
 
+    def exists(self):
+        return self.path.exists()
+
     @classmethod
     def of_str(cls, path: str | PathLike[str]):
         return cls(Path(path))

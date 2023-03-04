@@ -1,9 +1,9 @@
 from gzip import GzipFile
 from tempfile import NamedTemporaryFile
 
-from filesff.core.handlers import GzippedFileHandle
-from filesff.core.pointers import TemporaryFilePointer
-from filesff.csvs import csv_file_dicts_accessor, csv_file_lists_accessor
+from filesff.csvs import CsvFileDictFormatter, CsvFileListsFormatter
+from filesff.gzips import GzippedFileHandle
+from filesff.paths import PathFileHandle, TemporaryFilePointer
 
 
 def test_context_manager_temp_file():
@@ -34,7 +34,7 @@ def test_gzip_file():
     with GzipFile(filename=temp_file_path, mode="w") as gzip_file:
         gzip_file.write(b"blablabla")
 
-    handle = GzippedFileHandle.of(temp_file_path)
+    handle = GzippedFileHandle.of_str(temp_file_path)
 
     with handle.create_text_reader() as reader:
         assert reader.read() == "blablabla"
@@ -51,7 +51,7 @@ def test_load_rows_as_dicts_from_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
     csv_file_path.write_text("a,b,c\n1,2,3\n4,5,6\n")
 
-    csv_file_accessor = csv_file_dicts_accessor(csv_file_path)
+    csv_file_accessor = PathFileHandle.of(csv_file_path).access(CsvFileDictFormatter())
 
     rows = []
     with csv_file_accessor.create_loader() as loader:
@@ -68,7 +68,7 @@ def test_load_rows_as_lists_from_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
     csv_file_path.write_text("a,b,c\n1,2,3\n4,5,6\n")
 
-    csv_file_accessor = csv_file_lists_accessor(csv_file_path)
+    csv_file_accessor = PathFileHandle.of(csv_file_path).access(CsvFileListsFormatter())
 
     rows = []
     with csv_file_accessor.create_loader() as loader:
@@ -84,7 +84,7 @@ def test_load_rows_as_lists_from_csv_file(tmp_path):
 def test_dump_dicts_as_rows_into_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
 
-    csv_file_accessor = csv_file_dicts_accessor(csv_file_path)
+    csv_file_accessor = PathFileHandle.of(csv_file_path).access(CsvFileDictFormatter())
 
     rows = [
         {"a": "1", "b": "2", "c": "3"},
@@ -101,7 +101,7 @@ def test_dump_dicts_as_rows_into_csv_file(tmp_path):
 def test_dump_lists_as_rows_into_csv_file(tmp_path):
     csv_file_path = tmp_path / "test.csv"
 
-    csv_file_accessor = csv_file_lists_accessor(csv_file_path)
+    csv_file_accessor = PathFileHandle.of(csv_file_path).access(CsvFileListsFormatter())
 
     rows = [
         ["1", "2", "3"],
