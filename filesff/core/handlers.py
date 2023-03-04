@@ -6,8 +6,6 @@ from os import PathLike
 from pathlib import Path
 from typing import BinaryIO, TextIO, cast
 
-from filesff.core.pointers import PathFilePointer, TemporaryFilePointer
-
 
 class ReadableFileHandle:
     def create_binary_reader(self) -> BinaryIO:
@@ -44,30 +42,6 @@ class OpenableFileHandle(FileHandle):
 
     def create_binary_reader(self) -> BinaryIO:
         return self.open(mode="rb")
-
-
-@dataclass
-class PathFileHandle(OpenableFileHandle):
-    pointer: PathFilePointer
-
-    def open(self, mode, **kwargs) -> TextIO | BinaryIO:
-        return open(self.pointer.path, mode=mode)
-
-    def create_empty_file(self):
-        if not self.pointer.path.exists():
-            self.create_text_writer()
-
-    @classmethod
-    def of(cls, path: Path):
-        return cls(PathFilePointer(path))
-
-    @classmethod
-    def of_str(cls, path: str | PathLike[str]):
-        return cls(PathFilePointer.of_str(path))
-
-    @classmethod
-    def of_temp(cls):
-        return cls(TemporaryFilePointer.create())
 
 
 @dataclass
