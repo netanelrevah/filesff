@@ -1,8 +1,6 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
-from os import PathLike
-from pathlib import Path
-from typing import Any, Iterator, Type
+from typing import Any, Iterator
 
 from filesff.core.formatters import (
     BinaryFileFormatter,
@@ -10,8 +8,8 @@ from filesff.core.formatters import (
     FullTextFileFormatter,
     TextFileFormatter,
 )
+
 from filesff.core.handlers import FileHandle
-from filesff.paths import PathFileHandle
 
 
 @dataclass
