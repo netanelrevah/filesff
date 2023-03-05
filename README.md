@@ -7,10 +7,10 @@
 * replace file handles easily with mocks
 * handle many file types with generic protocol
 
-to install
+to install with all extras
 
 ```shell
-pip install filesff
+pip install filesff[protobug,ujson,cap,msgpack,s3]
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ pip install filesff
 read a json from gzip compressed file:
 
 ```python
-accessor = json_file_accessor("./file.gz", GzippedFileHandle)
+accessor = GzippedFileHandle.of_str("./file.gz").access(JsonFormatter())
 accessor.dump({"json": "data"})
 ```
 
@@ -30,7 +30,7 @@ pip install fileff[protobuf]
 ```python
 from google.protobuf.timestamp_pb2 import Timestamp
 
-accessor = temp_protobuf_file_accessor()
+accessor = PathFileHandle.of_temp().access(ProtoBytesFileFormatter)
 now = Timestamp()
 now.FromDatetime(datetime.now())
 accessor.dump(now)
@@ -42,16 +42,16 @@ implement new file format:
 
 ```python
 class NewFileFormatter(FullTextFileFormatter):
-    def load(self, reader: TextIO, **_) -> AnyStr:
+    def load(self, reader: IO, **_) -> AnyStr:
         return reader.read().replace("a", "e")
 
-    def dump(self, writer: TextIO, value: Any, **_):
+    def dump(self, writer: IO, value: Any, **_):
         writer.write(value.replace("e", "a"))
 ```
 
 use it 
 ```python
-file_accessor = FullFileAccessor.of("./path.ae", NewFileFormatter())
+file_accessor = PathFileHandle.of_str("./path.ae").access(NewFileFormatter())
 file_accessor.dump("ababab")
 ```
 
