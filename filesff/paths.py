@@ -5,7 +5,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TextIO
 
-from filesff.core.handlers import OpenableFileHandle
+from filesff.core import OpenableFileHandle
 from filesff.core.pointers import FilePointer
 
 

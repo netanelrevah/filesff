@@ -4,7 +4,7 @@ from typing import BinaryIO, cast
 from boto3 import Session, resource
 from mypy_boto3_s3.service_resource import Object
 
-from filesff.core.handlers import ReadableFileHandle
+from filesff.core import ReadableFileHandle
 from filesff.core.pointers import FilePointer
 
 

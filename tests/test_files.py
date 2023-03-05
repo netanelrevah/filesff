@@ -42,7 +42,7 @@ def test_gzip_file():
     with handle.create_binary_reader() as reader:
         assert reader.read() == b"blablabla"
 
-    with handle.create_compressed_reader() as reader:
+    with handle.file_handle.create_binary_reader() as reader:
         value = reader.read()
         assert value != b"blablabla" and value != "blablabla"
 

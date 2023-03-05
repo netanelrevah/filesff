@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 
-from filesff.core.handlers import FileHandle
+from filesff.core import FileHandle
 from filesff.paths import PathFileHandle
 
 
