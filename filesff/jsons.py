@@ -11,13 +11,12 @@ except ImportError:
 
 @dataclass
 class JsonFormatter(FullTextFileFormatter):
-    indentation: int = 2
-
     def load(self, reader: TextIO, **_) -> AnyStr:
-        return json.load(fp=reader)
+        return json.load(reader)
 
-    def dump(self, writer: TextIO, value: Any, **_):
-        json.dump(obj=value, fp=writer, indent=self.indentation)
+    def dump(self, writer: TextIO, value: Any, **kwargs):
+        indentation = kwargs.get("indentation", 2)
+        json.dump(value, writer, indent=indentation)
 
 
 @dataclass
@@ -33,8 +32,13 @@ class JsonLinesFileLoader:
 class JsonLinesFileDumper:
     writer: TextIO
 
-    def dump_object(self, message):
-        self.writer.write(json.dumps(message, indent=0))
+    _first_object: bool = True
+
+    def dump_object(self, value: Any):
+        if not self._first_object:
+            self.writer.write("\n")
+        self._first_object = False
+        self.writer.write(json.dumps(value, indent=0))
 
 
 class JsonLinesFormatter(TextFileFormatter):

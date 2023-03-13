@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 
-from filesff.core import FileHandle
+from filesff.core.files import AccessibleFileHandle
 from filesff.paths import PathFileHandle
 
 
 @dataclass
-class PipeFileHandle(FileHandle):
-    file_handle: FileHandle
+class PipeFileHandle(AccessibleFileHandle):
+    file_handle: AccessibleFileHandle
 
     @classmethod
     def of_path(cls, path: Path):

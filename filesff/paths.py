@@ -5,8 +5,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, TextIO
 
-from filesff.core import OpenableFileHandle
-from filesff.core.pointers import FilePointer
+from filesff.core.files import AccessibleFileHandle, FilePointer
 
 
 @dataclass
@@ -51,15 +50,23 @@ class TemporaryFilePointer(PathFilePointer):
 
 
 @dataclass
-class PathFileHandle(OpenableFileHandle):
+class PathFileHandle(AccessibleFileHandle):
     pointer: PathFilePointer
 
-    def open(self, mode, **kwargs) -> TextIO | BinaryIO:
+    def open(self, mode):
         return open(self.pointer.path, mode=mode)
 
-    def create_empty_file(self):
-        if not self.pointer.path.exists():
-            self.create_text_writer()
+    def create_binary_reader(self) -> BinaryIO:
+        return self.open(mode="rb")
+
+    def create_text_reader(self) -> TextIO:
+        return self.open(mode="rt")
+
+    def create_binary_writer(self) -> BinaryIO:
+        return self.open(mode="wb")
+
+    def create_text_writer(self) -> TextIO:
+        return self.open(mode="wb")
 
     @classmethod
     def of(cls, path: Path):
