@@ -34,7 +34,7 @@ class JsonLinesFileDumper:
 
     _first_object: bool = True
 
-    def dump_object(self, value: Any):
+    def dump_one(self, value: Any):
         if not self._first_object:
             self.writer.write("\n")
         self._first_object = False
@@ -55,4 +55,4 @@ class JsonLinesFormatter(TextFileFormatter):
     def dump(self, writer: TextIO, value: Iterator[Any], **_):
         dumper = self.create_dumper(writer)
         for message in value:
-            dumper.dump_object(message)
+            dumper.dump_one(message)
