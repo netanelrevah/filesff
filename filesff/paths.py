@@ -66,7 +66,7 @@ class PathFileHandle(AccessibleFileHandle):
         return self.open(mode="wb")
 
     def create_text_writer(self) -> TextIO:
-        return self.open(mode="wb")
+        return self.open(mode="wt")
 
     @classmethod
     def of(cls, path: Path):
