@@ -20,6 +20,23 @@ tests = ["attrs[tests-no-zope]", "zope.interface"]
 tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy (>=0.971,<0.990)", "mypy (>=0.971,<0.990)", "pympler", "pympler", "pytest (>=4.3.0)", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-mypy-plugins", "pytest-xdist[psutil]", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "bidict"
+version = "0.22.1"
+description = "The bidirectional mapping library for Python."
+category = "main"
+optional = true
+python-versions = ">=3.7"
+files = [
+    {file = "bidict-0.22.1-py3-none-any.whl", hash = "sha256:6ef212238eb884b664f28da76f33f1d28b260f665fc737b413b287d5487d1e7b"},
+    {file = "bidict-0.22.1.tar.gz", hash = "sha256:1e0f7f74e4860e6d0943a05d4134c63a2fad86f3d4732fb265bd79e4e856d81d"},
+]
+
+[package.extras]
+docs = ["furo", "sphinx", "sphinx-copybutton"]
+lint = ["pre-commit"]
+test = ["hypothesis", "pytest", "pytest-benchmark[histogram]", "pytest-cov", "pytest-xdist", "sortedcollections", "sortedcontainers", "sphinx"]
+
+[[package]]
 name = "black"
 version = "23.1.0"
 description = "The uncompromising code formatter."
@@ -493,13 +510,14 @@ version = "0.1.4"
 description = "Cap: lightweight package for use network captures"
 category = "main"
 optional = true
-python-versions = "*"
-files = []
-develop = false
+python-versions = ">=3.10,<4.0"
+files = [
+    {file = "cap-0.1.4-py3-none-any.whl", hash = "sha256:3f181f387706b135fd35b0d5b61de43ca65303e1b7f68288aab1552c1158b623"},
+    {file = "cap-0.1.4.tar.gz", hash = "sha256:954996897435857e6e41dbae7b265fcd2155d63ec99a5aa3d3f6c54bf8562976"},
+]
 
-[package.source]
-type = "directory"
-url = "../cap"
+[package.dependencies]
+bidict = ">=0.22.1,<0.23.0"
 
 [[package]]
 name = "click"

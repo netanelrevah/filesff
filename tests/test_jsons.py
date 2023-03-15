@@ -1,6 +1,6 @@
 import json
+from io import StringIO
 
-from six import StringIO
 from tstcls import TestClassBase
 
 from filesff.jsons import JsonFormatter, JsonLinesFileDumper, JsonLinesFileLoader
