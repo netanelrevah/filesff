@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import BinaryIO, Iterator, Sequence
+from typing import BinaryIO, Sequence
 
 from cap import CapFileDumper, CapFileLoader, CapturedPacket
 
@@ -14,9 +14,8 @@ class CapFileFormatter(BinaryFileFormatter):
     def create_dumper(self, writer: BinaryIO, **kwargs) -> CapFileDumper:
         return CapFileDumper(writer, **kwargs)
 
-    def load(self, reader: BinaryIO, **_) -> Iterator[CapturedPacket]:
-        loader = self.create_loader(reader)
-        yield from loader
+    def load(self, reader: BinaryIO, **_) -> Sequence[CapturedPacket]:
+        return list(self.create_loader(reader))
 
     def dump(self, writer: BinaryIO, value: Sequence[CapturedPacket], **kwargs):
         dumper = self.create_dumper(writer, **kwargs)

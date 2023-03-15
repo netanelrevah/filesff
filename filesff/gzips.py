@@ -11,8 +11,8 @@ class GzippedFileHandle(PipeFileHandle):
             GzipFile(fileobj=self.file_handle.create_binary_reader(), mode="r"),
         )
 
-    def create_binary_writer(self) -> BinaryIO:
+    def create_binary_truncating_writer(self) -> BinaryIO:
         return cast(
             BinaryIO,
-            GzipFile(fileobj=self.file_handle.create_binary_reader(), mode="w"),
+            GzipFile(fileobj=self.file_handle.create_binary_writer(), mode="w"),
         )
