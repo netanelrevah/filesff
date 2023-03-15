@@ -62,7 +62,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --with dev --all-extras --no-interaction --no-root
+        run: poetry install --with dev --all-extras --no-interaction
 
       - name: Run pytest
         run: poetry run pytest -v
