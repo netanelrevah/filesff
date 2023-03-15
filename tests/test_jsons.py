@@ -48,8 +48,8 @@ class TestJsonLinesFileDumper(TestClassBase):
 
     def test_dump_object(self):
         ###
-        self.tester.dump_object([])
-        self.tester.dump_object({})
+        self.tester.dump_one([])
+        self.tester.dump_one({})
         ###
 
         assert self.writer.getvalue() == "[]\n{}"
